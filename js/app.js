@@ -2,7 +2,7 @@ const App = React.createClass({
   getInitialState: function () {
     return {
       isEditor: true,
-      elements:[]
+      elements: []
     };
   },
   toggle: function () {
@@ -10,10 +10,10 @@ const App = React.createClass({
       isEditor: !this.state.isEditor
     });
   },
-  addElem:function (element) {
+  addElem: function (element) {
     console.log(element);
     this.state.elements.push(element);
-    this.setState({elements:this.state.elements});
+    this.setState({elements: this.state.elements});
   },
   render: function () {
     const isEditor = this.state.isEditor;
@@ -21,7 +21,7 @@ const App = React.createClass({
       <div>
         <button onClick={this.toggle}>{isEditor ? "preview" : "edit"}</button>
         <div className={isEditor ? "" : "hidden"}>
-          <Edit onAdd={this.addElem}/>
+          <Edit onAdd={this.addElem} elements={this.state.elements}/>
         </div>
         <div className={isEditor ? "hidden" : ""}>
           <Preview />
@@ -33,9 +33,10 @@ const App = React.createClass({
 
 const Edit = React.createClass({
   render: function () {
+
     return (
       <div>
-        <Left />
+        <Left elements={this.props.elements}/>
         <Right add={this.props.onAdd}/>
       </div>
     );
@@ -44,16 +45,19 @@ const Edit = React.createClass({
 
 const Left = React.createClass({
   render: function () {
+    const elements = this.props.elements.map((element,index)=> {
+      return <li key={index}><input type={element}/></li>
+    });
     return (
       <div>
-
+        {elements}
       </div>
     );
   }
 });
 
 const Right = React.createClass({
-  add:function () {
+  add: function () {
     const element = $("input[name=elem]:checked").val();
     this.props.add(element);
   },
