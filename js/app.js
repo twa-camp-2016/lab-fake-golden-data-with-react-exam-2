@@ -11,12 +11,14 @@ const App = React.createClass({
     });
   },
   addElem: function (element) {
-    this.state.elements.push(element);
-    this.setState({elements: this.state.elements});
+    const elements = this.state.elements;
+    elements.push(element);
+    this.setState({elements});
   },
   delElem:function (index) {
-    this.state.elements.splice(index,1);
-    this.setState({elements: this.state.elements});
+    const elements = this.state.elements;
+    elements.splice(index,1);
+    this.setState({elements});
   },
   render: function () {
     const isEditor = this.state.isEditor;
@@ -27,7 +29,7 @@ const App = React.createClass({
           <Edit onAdd={this.addElem} onDel={this.delElem} elements={this.state.elements} />
         </div>
         <div className={isEditor ? "hidden" : ""}>
-          <Preview />
+          <Preview elements={this.state.elements}/>
         </div>
       </div>
     );
@@ -82,9 +84,14 @@ const Right = React.createClass({
 });
 const Preview = React.createClass({
   render: function () {
+    const elements = this.props.elements.map((element,index)=> {
+      return <li key={index}>
+        <input type={element}/>
+      </li>
+    });
     return (
       <div>
-        Preview
+        {elements}
       </div>
     );
   }
