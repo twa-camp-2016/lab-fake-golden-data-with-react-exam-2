@@ -1,7 +1,8 @@
 const App = React.createClass({
     getInitialState: function () {
             return {
-                isEditor:true
+                isEditor:true,
+                elements:[]
             }
         },
 toggle:function () {
@@ -10,13 +11,22 @@ toggle:function () {
   })
 
 },
-
+addElement:function (element) {
+  const elements = this.state.elements;
+    elements.push(element);
+    this.setState({elements});
+},
+    deleteElement:function (index) {
+        const elements = this.state.elements;
+        elements.splice(index,1);
+        this.setSate({elements});
+    },
 render:function(){
             const isEditor = this.state.isEditor;
 return<div>
     <button onClick={this.toggle}>{isEditor? "Preview":"Editor"}</button>
 <div className={isEditor? "" :"hidden"}>
-    <Editor />
+    <Editor onAdd={this.addElement} elements = {this.state.elements} onDelete={this.deleteElement}/>
     <div className={isEditor? "hidden":""}>
         <Preview /></div>
 
@@ -27,21 +37,35 @@ return<div>
 const Editor = React.createClass({
 render:function(){
 return<div>
-<Left />
-< Right/>
+<Left  elements = {this.props.elements} onDelete={this.props.onDelete}/>
+< Right onAdd={this.props.onAdd}/>
 </div>
 }
 })
 
 const Left = React.createClass({
+    remove:function (index) {
+      this.props.onDelete(index);
+    },
 render:function(){
-return<div> Left</div>
+    const elements= this.props.elements.map((ele,index)=>{
+       return <div><input type={ele}/>
+       <button onClick={this.remove.bind(this,index)}>X</button></div>
+    })
+return<div> {elements}</div>
 }
 });
 
 const Right = React.createClass({
+    add:function () {
+      const element = $('input[name=element]:checked').val();
+        this.props.onAdd(element);
+    },
 render:function(){
-return<div> Right</div>
+return<div>
+    <input type="radio" name="element" value="text" /> Text
+     <input type="radio" name="element" value="date"/>Date
+<button onClick={this.add} ick>+</button></div>
 }
 })
 const Preview = React.createClass({
