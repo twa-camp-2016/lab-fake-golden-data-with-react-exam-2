@@ -6,6 +6,13 @@ const App = React.createClass({
             elements:[]
         }
     },
+
+    addElement:function (element) {
+        const elements = this.state.elements;
+        elements.push(element);
+        this.setState({elements});
+    },
+
     toggle :function () {
         this.setState({
             isEditor:!this.state.isEditor
@@ -16,7 +23,7 @@ const App = React.createClass({
         return <div>
             <button onClick={this.toggle}>{isEditor? "Previewer" : "Editor"}</button>
             <div className={isEditor ? "" : "hidden"}>
-                <Editor />
+                <Editor onAdd = {this.addElement}/>
                 </div>
             <div className={isEditor ? "hidden" : ""}>
                 <Previewer />
@@ -30,14 +37,22 @@ const Editor = React.createClass({
     render:function(){
         return <div>
             <Left />
-            <Right />
+            <Right onAdd = {this.props.onAdd}/>
         </div>
         }
 });
 
 const Right = React.createClass({
+    add :function () {
+         const element = $("input[name=element]:checked").val();
+        this.props.onAdd(element);
+    },
     render:function(){
-        return <div>Right</div>
+        return <div>
+            <input type="radio" name="element" value="text"/>Text
+            <input type="radio" name="element" value="Date"/>Date
+            <button onClick={this.add}>+</button>
+        </div>
         }
 });
 
