@@ -13,6 +13,11 @@ var App = React.createClass({
         elements.push(e)
         this.setState(elements)
     },
+    delete:function (i) {
+        const elements=this.state.elements;
+        elements.splice(i,1)
+        this.setState(elements)
+    },
     render: function () {
         const isEditor = this.state.isEditor;
         return (
@@ -35,7 +40,7 @@ var Editor = React.createClass({
         return (
             <div>
                 <Right  onAdd={this.props.onAdd}/>
-                <Left/>
+                <Left onDelete={this.props.onDelete} elements={this.props.elements}/>
             </div>
 
         )
@@ -59,9 +64,19 @@ var Right = React.createClass({
 });
 
 var Left = React.createClass({
+    delete:function (i) {
+        this.props.onDelete(i);
+
+    },
     render: function () {
+        const elements=this.props.elements.map((e,i)=>{
+            return <div key={i}>
+                <input type={e}/>
+                <button onClick={this.delete.bind(this,i)}>X</button>
+                </div>
+        })
         return (
-            <div></div>
+            <div>{elements}</div>
 
         )
     }
