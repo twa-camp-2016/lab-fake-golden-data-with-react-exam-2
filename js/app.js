@@ -1,37 +1,35 @@
 const App = React.createClass({
 
-    getInitialState: function () {
+    getInitialState:function () {
         return {
-            isEditor: true,
+            isEditor:true,
             elements:[]
         }
     },
-    toogle: function () {
-        this.setState({isEditor: !this.state.isEditor})
+    toogle:function () {
+        this.setState({isEditor:!this.state.isEditor})
     },
     onAdd:function (element) {
         const elements = this.state.elements;
         elements.push(element);
         
-        this.setState({elements});
+        this.setState({elements})
     },
     onRemove:function (i) {
         const elements = this.state.elements;
         elements.splice(i,1);
 
-        this.setState({elements});
+        this.setState({elements})
     },
-    render: function () {
-        var isEditor = this.state.isEditor;
+    render: function (isEditor) {
+        isEditor = isEditor || this.state.isEditor;
         return (
             <div>
-                <button onClick={this.toogle}>{isEditor ? 'Preview' : 'Editor'}</button>
-
-                <div className={isEditor ? '' : 'hidden'}>
+                <button onClick={this.toogle}>{isEditor? 'Preview':'Editor'}</button>
+                <div className={isEditor?'':'hidden'}>
                     <Editor onAdd={this.onAdd} onRemove={this.onRemove} elements={this.state.elements}/>
                 </div>
-
-                <div className={isEditor ? 'hidden' : ''}>
+                <div className={isEditor?'hidden':''}>
                     <Preview elements={this.state.elements}/>
                 </div>
             </div>
@@ -41,7 +39,7 @@ const App = React.createClass({
 
 const Editor = React.createClass({
 
-    render: function () {
+    render: function(){
         return (
             <div>
                 <div>
@@ -50,7 +48,6 @@ const Editor = React.createClass({
                 <div>
                     <Right onAdd={this.props.onAdd}/>
                 </div>
-
             </div>
         )
     }
@@ -61,7 +58,7 @@ const Left = React.createClass({
         this.props.onRemove(i)
     },
     render: function(){
-        const elements = this.props.elements.map((ele,i)=> {
+        const elements = this.props.elements.map((ele,i)=>{
             return <div key={i}>
                 <input type={ele}/>
                 <button onClick={this.remove.bind(this,i)}>x</button>
@@ -92,7 +89,7 @@ const Right = React.createClass({
 const Preview = React.createClass({
 
     render: function(){
-        const elements = this.props.elements.map((ele,i)=> {
+        const elements = this.props.elements.map((ele,i)=>{
             return <div key={i}>
                 <input type={ele}/>
             </div>
@@ -103,4 +100,4 @@ const Preview = React.createClass({
     }
 });
 
-ReactDOM.render(<App/>, document.getElementById('content'));
+ReactDOM.render(<App/>,document.getElementById('content'))
