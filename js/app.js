@@ -5,21 +5,26 @@ var App = React.createClass({
             isEditor: true
         }
     },
-    isChange:function () {
-        this.setState({isEditor:!this.state.isEditor});
+    isChange: function () {
+        this.setState({isEditor: !this.state.isEditor});
+    },
+    add:function (e) {
+        const elements=this.state.elements;
+        elements.push(e)
+        this.setState(elements)
     },
     render: function () {
-        const isEditor=this.state.isEditor;
+        const isEditor = this.state.isEditor;
         return (
             <div>
-                <button onClick={this.isChange}>{isEditor?"preview":"edit"}</button>
-                <div className={isEditor?'':"hidden"}>
-                    <Editor/>
-                    </div>
-                <div className={isEditor?'hidden':""}>
+                <button onClick={this.isChange}>{isEditor ? "preview" : "edit"}</button>
+                <div className={isEditor ? '' : "hidden"}>
+                    <Editor onAdd={this.add} onDelete={this.delete} elements={this.state.elements}/>
+                </div>
+                <div className={isEditor ? 'hidden' : ""}>
                     <Preview/>
-                    </div>
-                
+                </div>
+
             </div>
 
         )
@@ -28,16 +33,45 @@ var App = React.createClass({
 var Editor = React.createClass({
     render: function () {
         return (
-        <div></div>
-           
+            <div>
+                <Right  onAdd={this.props.onAdd}/>
+                <Left/>
+            </div>
+
         )
     }
 });
+var Right = React.createClass({
+    add: function () {
+        const e = $("input[name=input]:checked").val();
+        this.props.onAdd(e);
+    },
+    render: function () {
+        return (
+            <div>
+                <input type="radio" name="input" value="text"/>文本框
+                <input type="radio" name="input" value="date"/>日期
+                <button onClick={this.add}>+</button>
+            </div>
+
+        )
+    }
+});
+
+var Left = React.createClass({
+    render: function () {
+        return (
+            <div></div>
+
+        )
+    }
+});
+
 var Preview = React.createClass({
     render: function () {
         return (
-        <div></div>
-           
+            <div></div>
+
         )
     }
 });
