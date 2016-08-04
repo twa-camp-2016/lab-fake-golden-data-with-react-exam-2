@@ -1,60 +1,64 @@
 const App = React.createClass({
-    getInitialState : function () {
-      return {
-          isEditor:true,
-          elements:[]
-      }
+    getInitialState: function() {
+        return {
+            isEditor: true,
+            elements: []
+        }
     },
-
-    toggle:function () {
+    toggle: function () {
         this.setState({
-            isEditor:!this.state.isEditor
-        })
+            isEditor: !this.state.isEditor
+        });
     },
-    addElement:function (element) {
-      const elements = this.state.elements
-       elements.push(element);
-        this.setState({elements})
+    addElement: function(element) {
+        const elements = this.state.elements;
+        elements.push(element);
+        this.setState({elements});
     },
-    deleteElement:function (index) {
-        const elements = this.state.elements
-        elements.splice(index,1);
-        this.setState({elements})
+    deleteElement: function (index) {
+        const elements = this.state.elements;
+        elements.splice(index, 1);
+        this.setState({elements});
     },
-
-    render : function () {
+    render: function() {
         const isEditor = this.state.isEditor;
         return <div>
-            <button onClick={this.toggle}>{isEditor?"Previewer":"Edit"}</button>
-            <div classNamne ={isEditor?"":"hidden"}>
-                <Editor elements = {this.state.elements}  onAdd={this.addElement} onDelete={this.deleteElement}/>
+            <button onClick={this.toggle}>{isEditor ? "Preview" : "Edit"}</button>
+            <div className={isEditor ? "" : "hidden"}>
+                <Editor elements={this.state.elements} onAdd={this.addElement} onDelete={this.deleteElement} />
             </div>
-        </div>
-
+            <div className={isEditor ? "hidden" : ""}>
+                <Previewer elements={this.state.elements} />
+            </div>
+        </div>;
     }
 });
+
 const Editor = React.createClass({
-    render:function () {
+    render: function () {
         return <div>
-            <Left elements = {this.props.elements} onDelete={this.props.onDelete}/>
-            <Right elements = {this.props.elements}/>
-        </div>
+            <Left elements={this.props.elements} onDelete={this.props.onDelete} />
+            <Right onAdd={this.props.onAdd}/>
+        </div>;
+
     }
 });
 
 const Left = React.createClass({
-    remove:function (index) {
+    remove: function(index) {
         this.props.onDelete(index);
     },
-    render:function () {
-        const elements = this.props.elements.map((ele,index) => {
-            "use strict";
+    render: function() {
+        const elements = this.props.elements.map((ele, index) => {
             return <div key={index}>
-                <input type="ele"/>
-                <button onClick={this.remove}>×</button>
-            </div>
-        })
-        return <div>{elements}</div>
+                <input type={ele}/>
+                <button onClick={this.remove.bind(this, index)}>X</button>
+            </div>;
+        });
+
+        return <div>
+            {elements}
+        </div>
     }
 });
 
@@ -72,6 +76,20 @@ const Right = React.createClass({
     }
 });
 
+const Previewer = React.createClass({
+    render: function () {
+        const elements = this.props.elements.map((ele, index) => {
+            return <div key={index}>
+                <input type={ele}/>
+            </div>;
+        });
+        return <div>
+            {elements}
+            <button>Submit</button>
+        </div>;
+    }
+});
 
 
-ReactDOM.render(<App/>,document.getElementById('content'));
+
+ReactDOM.render(<App />, document.getElementById('content'));
