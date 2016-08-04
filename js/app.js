@@ -62,7 +62,6 @@ const Right = React.createClass({
         </div>
     }
 });
-
 const Left = React.createClass({
     render:function(){
         const elements=this.props.elements.map((ele,index)=>{
