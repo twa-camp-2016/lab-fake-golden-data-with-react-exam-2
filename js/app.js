@@ -2,21 +2,21 @@ const App = React.createClass({
   getInitialState: function () {
     return {
       isEditor: true,
-      elements:[]
+      elements: []
     }
   },
   toggle: function () {
     this.setState({isEditor: !this.state.isEditor});
   },
-  addElement:function (element) {
+  addElement: function (element) {
 
     const elements = this.state.elements;
     elements.push(element);
     this.setState({elements});
   },
-  delElement:function (index) {
-    this.state.elements.splice(index,1);
-    this.setState({elements:this.state.elements});
+  delElement: function (index) {
+    this.state.elements.splice(index, 1);
+    this.setState({elements: this.state.elements});
   },
   render: function () {
     return (
@@ -26,7 +26,7 @@ const App = React.createClass({
           <Edit onAdd={this.addElement} elements={this.state.elements} onDel={this.delElement}/>
         </div>
         <div className={this.state.isEditor ? "hidden" : ""}>
-          <Preview />
+          <Preview elements={this.state.elements}/>
         </div>
       </div>
     );
@@ -45,14 +45,14 @@ const Edit = React.createClass({
 });
 
 const Left = React.createClass({
-  remove:function (index) {
+  remove: function (index) {
     this.props.del(index);
   },
   render: function () {
-    const elements = this.props.elements.map((element,index)=>{
+    const elements = this.props.elements.map((element, index)=> {
       return <li key={index}>
         <input type={element}/>
-        <button onClick={this.remove.bind(this,index)}>X</button>
+        <button onClick={this.remove.bind(this, index)}>X</button>
       </li>
     });
     return (
@@ -64,15 +64,15 @@ const Left = React.createClass({
 });
 
 const Right = React.createClass({
-  add:function () {
+  add: function () {
     const element = $("input[name=elem]:checked").val();
     this.props.add(element);
   },
   render: function () {
     return (
       <div>
-        <input type="radio" name="elem" value="text" />Text
-        <input type="radio" name="elem" value="date" />Date
+        <input type="radio" name="elem" value="text"/>Text
+        <input type="radio" name="elem" value="date"/>Date
         <button onClick={this.add}>+</button>
       </div>
     );
@@ -81,9 +81,16 @@ const Right = React.createClass({
 
 const Preview = React.createClass({
   render: function () {
+    const elements = this.props.elements.map((element, index)=> {
+      return (
+        <li key={index}>
+          <input type={element}/>
+        </li>
+      )
+    });
     return (
       <div>
-        world
+        {elements}
       </div>
     );
   }
