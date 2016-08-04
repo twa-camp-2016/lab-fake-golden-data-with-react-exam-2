@@ -64,8 +64,16 @@ const Left = React.createClass({
 });
 
 const Right = React.createClass({
+    add:function () {
+         const element = $("input[name=element]:checked").val();
+        this.props.onAdd(element);
+    },
     render:function(){
-        return <div>Right</div>
+        return <div>
+            <input type="radio" name="element" value="text"/>Text
+            <input type="radio" name="element" value="date"/>Date
+            <button onClick={this.add}>+</button>
+        </div>
         }
 });
 
