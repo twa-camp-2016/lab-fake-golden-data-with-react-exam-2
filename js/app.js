@@ -46,8 +46,19 @@ const Editor = React.createClass({
 });
 
 const Left = React.createClass({
+    remove:function (index) {
+        this.props.onDelete(index);
+    },
    render:function () {
-       return <div></div>
+       const elements = this.props.elements.map((ele,index)=>{
+          return <div key={index}>
+              <input type={ele}/>
+              <button onClick={this.remove.bind(this,index)}>X</button>
+          </div>
+       });
+       return <div>
+           {elements}
+       </div>
    }
 });
 
