@@ -1,8 +1,10 @@
 // 22:45
 const App = React.createClass({
     getInitialState: function () {
-        return ({isEditor: true,
-        elements:[]});
+        return ({
+            isEditor: true,
+            elements: []
+        });
     },
     toggle: function () {
         this.setState({isEditor: !this.state.isEditor});
@@ -12,11 +14,17 @@ const App = React.createClass({
         elements.push(element);
         this.setState({elements});
     },
+    deleteElement(element){
+        const elements = this.state.elements;
+        elements.splice(element,1);
+        this.setState({elements});
+    },
     render: function () {
         const isEditor = this.state.isEditor;
         return <div>
             <button onClick={this.toggle}>{isEditor ? 'Preview' : 'Editor'}</button>
-            <Editor className={isEditor ? '' : 'hidden'} elements = {this.state.elements} onAdd={this.addElement}/>
+            <Editor className={isEditor ? '' : 'hidden'} elements={this.state.elements} onDelete={this.deleteElement}
+                    onAdd={this.addElement}/>
             <Preview className={isEditor ? 'hidden' : ''}/>
         </div>;
     }
@@ -26,18 +34,21 @@ const Editor = React.createClass({
     render: function () {
         return (
             <div className={this.props.className}>
-                <Left elements = {this.props.elements}/>
+                <Left elements={this.props.elements} onDelete={this.props.onDelete}/>
                 <Right onAdd={this.props.onAdd}/>
             </div>
         )
     }
 });
 const Left = React.createClass({
+    remove: function (index) {
+        this.props.onDelete(index);
+    },
     render: function () {
         const elements = this.props.elements.map((element, index)=> {
-            return <div key = {index}>
+            return <div key={index}>
                 <input type={element}/>
-                <input type='button' value='-'/>
+                <input type='button' value='-' onClick={this.remove.bind(this, index)}/>
             </div>
         });
         return (
