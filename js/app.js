@@ -1,4 +1,4 @@
-// 22:45
+// 22:45  23:12
 const App = React.createClass({
     getInitialState: function () {
         return ({
@@ -16,7 +16,7 @@ const App = React.createClass({
     },
     deleteElement(element){
         const elements = this.state.elements;
-        elements.splice(element,1);
+        elements.splice(element, 1);
         this.setState({elements});
     },
     render: function () {
@@ -25,7 +25,7 @@ const App = React.createClass({
             <button onClick={this.toggle}>{isEditor ? 'Preview' : 'Editor'}</button>
             <Editor className={isEditor ? '' : 'hidden'} elements={this.state.elements} onDelete={this.deleteElement}
                     onAdd={this.addElement}/>
-            <Preview className={isEditor ? 'hidden' : ''}/>
+            <Preview className={isEditor ? 'hidden' : ''} elements={this.state.elements}/>
         </div>;
     }
 });
@@ -76,8 +76,14 @@ const Right = React.createClass({
 
 const Preview = React.createClass({
     render: function () {
+        const elements = this.props.elements.map((ele, index)=> {
+            return <div key={index}>
+                <input type={ele}/>
+            </div>
+        });
         return (
-            <div className={this.props.className}>preview</div>
+            <div className={this.props.className}>{elements}
+            <input type="submit" value='submit'/></div>
         )
     }
 });
