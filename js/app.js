@@ -11,6 +11,32 @@ const App = React.createClass({
     return (
       <div>
         <button onClick={this.toggle}>{this.state.isEditor ? "preview" : "edit"}</button>
+        <div className={this.state.isEditor ? "" : "hidden"}>
+          <Edit />
+        </div>
+        <div className={this.state.isEditor ? "hidden" : ""}>
+          <Preview />
+        </div>
+      </div>
+    );
+  }
+});
+
+const Edit = React.createClass({
+  render: function () {
+    return (
+      <div>
+        hello
+      </div>
+    );
+  }
+});
+
+const Preview = React.createClass({
+  render: function () {
+    return (
+      <div>
+        world
       </div>
     );
   }
