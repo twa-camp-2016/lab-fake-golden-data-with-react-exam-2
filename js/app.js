@@ -20,7 +20,6 @@ const App = React.createClass({
         elements.splice(index, 1);
         this.setState({elements});
     },
-    
     render: function() {
         const isEditor = this.state.isEditor;
         return <div>
@@ -29,7 +28,7 @@ const App = React.createClass({
                 <Editor elements={this.state.elements} onAdd={this.addElement} onDelete={this.deleteElement} />
             </div>
             <div className={isEditor ? "hidden" : ""}>
-               
+                <Previewer elements={this.state.elements} />
             </div>
         </div>;
     }
@@ -66,6 +65,7 @@ const Right = React.createClass({
     add: function () {
         const element = $("input[name=element]:checked").val();
         this.props.onAdd(element);
+        // console.log(element)
     },
     render: function() {
         return <div>
@@ -75,6 +75,21 @@ const Right = React.createClass({
         </div>
     }
 });
+
+const Previewer = React.createClass({
+    render: function () {
+        const elements = this.props.elements.map((ele, index) => {
+            return <div key={index}>
+                <input type={ele}/>
+            </div>;
+        });
+        return <div>
+            {elements}
+            <button>Submit</button>
+        </div>;
+    }
+});
+
 
 
 ReactDOM.render(<App />, document.getElementById('content'));
