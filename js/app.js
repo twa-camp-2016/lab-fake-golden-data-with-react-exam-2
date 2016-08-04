@@ -5,6 +5,10 @@ const App = React.createClass({
             <div>
                 <Editor />
             </div>
+
+            <div>
+                <Previewer />
+            </div>
         </div>
 
     }
@@ -21,6 +25,16 @@ const Editor = React.createClass({
 })
 
 
+x
+
+const Previewer = React.createClass({
+
+    render:function(){
+        return <div>
+            Previewer
+        </div>
+    }
+})
 
 
 
