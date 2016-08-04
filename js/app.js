@@ -15,7 +15,13 @@ const App = React.createClass({
 
     addElement :function (element) {
         const elements = this.state.elements;
-        element.push(element);
+        elements.push(element);
+        this.setState({elements});
+    },
+
+    deleteElement :function (index) {
+        const elements = this.state.elements;
+        elements.splice(index, 1);
         this.setState({elements});
     },
 
@@ -24,7 +30,7 @@ const App = React.createClass({
         return <div>
             <button onClick={this.toggle}>{isEditor? "Previewer" : "Editor"}</button>
             <div className={isEditor? "" : "hidden"}>
-                <Editor onAdd = {this.addElement}/>
+                <Editor onAdd = {this.addElement} elements = {this.state.elements} onDelete = {this.deleteElement}/>
             </div>
             <div className={isEditor ? "hidden" : ""}>
                 <Previewer elements = {this.state.elements}/>
@@ -36,15 +42,27 @@ const App = React.createClass({
 const Editor = React.createClass({
     render:function(){
         return <div>
-            <Left />
+            <Left elements = {this.props.elements} onDelete = {this.props.onDelete}/>
             <Right onAdd = {this.props.onAdd}/>
         </div>
         }
 });
 
 const Left = React.createClass({
+    remove:function (index) {
+        this.props.onDelete(index);
+    },
     render:function(){
-        return <div>Left</div>
+        const elements = this.props.elements.map((ele, index) => {
+           return <div key = {index}>
+               <input type = {ele} />
+               <button onClick={this.remove.bind(this, index)}>X</button>
+           </div>
+
+        });
+        return <div>
+            {elements}
+        </div>
         }
 });
 
@@ -65,7 +83,15 @@ const Right = React.createClass({
 
 const Previewer = React.createClass({
     render:function(){
-        return <div>Previewer</div>
+        const elements = this.props.elements.map((ele, index) => {
+            return <div  key = {index}>
+                <input type = {ele}/>
+            </div>
+        });
+        return <div>
+            {elements}
+            <button>submit</button>
+        </div>
         }
 });
 
