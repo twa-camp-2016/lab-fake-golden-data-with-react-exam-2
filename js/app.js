@@ -1,75 +1,43 @@
 const App = React.createClass({
     getInitialState(){
       return{
-          idEditor:true,
-          counts:[]
+          counts:[],
+          isEditor:true
       }
     },
     toggle(){
       this.setState({isEditor:!this.state.isEditor})
     },
-    addCount(count){
-      const counts=this.state.counts;
-        counts.push(count)
-        this.setState({counts});
-        console.log(counts)
-    },
-    deleteCount(index){
-        const counts=this.state.counts;
-        counts.splice(index,1)
-        this.setState({counts});
-    },
     render(){
-        const isEditor=this.state.idEditor;
+        const isEditor=this.state.isEditor;
         return <div>
-
-            <button onClick={this.toggle}>{isEditor ? "预览" : "编辑"}</button>
-            <div className={isEditor ? "" : "hidden"}>
-                <Left counts={this.state.counts} onDelete={this.deleteCount}></Left>
-                <Right onAdd={this.addCount}></Right>
+            <button onClick={this.toggle}>{isEditor?"预览":"编辑"}</button>
+            <div className={isEditor?"":"hidden"}>
+                <Left></Left>
+                <Right></Right>
             </div>
-            <div className={isEditor ? "hidden" : ""}>
-                <Preview ></Preview>
+            <div className={isEditor?"hidden":""}>
+                <Preview></Preview>
             </div>
-
-        </div>
-    }
-});
-
-const Right = React.createClass({
-    add(){
-        const count = $("input[name=input]:checked").val()
-        this.props.onAdd(count);
-    },
-    render(){
-        return <div>
-            <input type="radio" name="input" value="text"/>Text
-            <input type="radio"  name="input" value="date"/>Datetext
-            <button onClick={this.add}>+</button>
         </div>
     }
 });
 
 const Left = React.createClass({
-    remove(index){
-        this.props.onDelete(index)
-    },
     render(){
-        const counts=this.props.counts.map((count,index)=>{
-            return <div key={index}>
-                <input type={count}/>
-                <button onClick={this.remove.bind(this,index)}>X</button>
-            </div>
-        })
-        return <div>
-            {counts}
-        </div>
+        return <div>le</div>
+    }
+});
+
+const Right = React.createClass({
+    render(){
+        return <div>Rgi</div>
     }
 });
 
 const Preview = React.createClass({
     render(){
-        return <div>p</div>
+        return <div>Pr</div>
     }
 });
 
