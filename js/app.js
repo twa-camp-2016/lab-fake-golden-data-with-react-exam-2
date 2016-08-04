@@ -15,12 +15,17 @@ const App = React.createClass({
         elements.push(element);
         this.setState({elements: elements});
     },
+    deleteElement: function (index) {
+        const elements = this.state.elements;
+        elements.splice(index, 1);
+        this.setState({elements});
+    },
     render: function () {
         const isEditor = this.state.isEditor;
         return <div>
             <button onClick={this.toggle}>{isEditor ? "Preview" : "Edit"}</button>
             <div className={isEditor?"":"hidden"}>
-                <Editor elements={this.state.elements} onAdd={this.addElement}/>
+                <Editor elements={this.state.elements} onAdd={this.addElement} onDelete={this.deleteElement}/>
             </div>
         </div>
 
@@ -30,12 +35,31 @@ const Editor = React.createClass({
     render: function () {
         return <div>
             <Right onAdd={this.props.onAdd}/>
+            <Left elements={this.props.elements} onDelete={this.props.onDelete}/>
         </div>
     }
 });
+const Left = React.createClass({
+    remove:function (index) {
+        this.props.onDelete(index);
+    },
+    render: function () {
+        const elements = this.props.elements.map((ele, index)=> {
+            return <div id={this.index}>
+                <input type={ele}/>
+                <button onClick={this.remove.bind(this, index)}>X</button>
+            </div>
+
+        })
+        return <div>
+            {elements}
+        </div>
+    }
+});
+
 const Right = React.createClass({
-    add:function () {
-        const element=$("input[name= element]:checked").val();
+    add: function () {
+        const element = $("input[name= element]:checked").val();
         this.props.onAdd(element);
     },
     render: function () {
@@ -44,9 +68,9 @@ const Right = React.createClass({
             <input type="radio" name="element" value="Date"/>Date
             <button onClick={this.add}>+</button>
         </div>
-        }
-        });
+    }
+});
 
-        ReactDOM.render(
-        <App />
-        , document.getElementById('content'));
+ReactDOM.render(
+    <App />
+    , document.getElementById('content'));
