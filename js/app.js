@@ -1,4 +1,4 @@
-//23:15
+//23:15   23:42    27min
 const App = React.createClass({
     getInitialState: function () {
         return ({
@@ -9,41 +9,43 @@ const App = React.createClass({
     toggle: function () {
         this.setState({isEditor: !this.state.isEditor});
     },
-    addElement:function (element) {
+    addElement: function (element) {
         const elements = this.state.elements;
         elements.push(element);
         this.setState({elements});
     },
-    deleteElement:function (index) {
+    deleteElement: function (index) {
         const elements = this.state.elements;
-        elements.splice(index,1);
+        elements.splice(index, 1);
         this.setState({elements});
     },
     render: function () {
         const isEditor = this.state.isEditor;
         return <div>
             <button onClick={this.toggle}>{isEditor ? 'Preview' : 'Editor'}</button>
-            <Editor className={isEditor ? '' : 'hidden'} elements = {this.state.elements} onDelete = {this.deleteElement} onAdd = {this.addElement}/>
-            <Preview className={isEditor ? 'hidden' : ''}/>
+            <Editor className={isEditor ? '' : 'hidden'} elements={this.state.elements} onDelete={this.deleteElement}
+                    onAdd={this.addElement}/>
+            <Preview className={isEditor ? 'hidden' : ''} elements={this.state.elements}/>
         </div>
     }
 });
 const Editor = React.createClass({
     render: function () {
         return (<div className={this.props.className}>
-            <Left elements = {this.props.elements} onDelete = {this.props.onDelete}/>
-            <Right onAdd = {this.props.onAdd}/>
+            <Left elements={this.props.elements} onDelete={this.props.onDelete}/>
+            <Right onAdd={this.props.onAdd}/>
         </div>)
     }
 });
 const Left = React.createClass({
-    remove:function (index) {
-      this.props.onDelete(index);
+    remove: function (index) {
+        this.props.onDelete(index);
     },
-    render:function () {
-        const elements = this.props.elements.map((element,index)=>{
-            return <div key={index}><input type={element}/>
-            <input type="button" value='-' onClick={this.remove.bind(this,index)}/>
+    render: function () {
+        const elements = this.props.elements.map((element, index)=> {
+            return <div key={index}>
+                <input type={element}/>
+                <input type="button" value='-' onClick={this.remove.bind(this, index)}/>
             </div>
         });
         return (<div>
@@ -53,14 +55,14 @@ const Left = React.createClass({
 });
 
 const Right = React.createClass({
-    add:function(){
+    add: function () {
         const elements = $('input[name=element]:checked').val();
         this.props.onAdd(elements);
     },
-    render:function () {
+    render: function () {
         return (<div>
-            <input type="radio" name="elements" value='text'/>Text
-            <input type="radio" name="elements" value='date'/>Date
+            <input type="radio" name="element" value='text'/>Text
+            <input type="radio" name="element" value='date'/>Date
             <input type="button" value='+' onClick={this.add}/>
         </div>)
     }
@@ -68,8 +70,12 @@ const Right = React.createClass({
 
 const Preview = React.createClass({
     render: function () {
+        const elements = this.props.elements.map((ele, index)=> {
+            return <div key = {index}><input type={ele}/></div>
+        });
         return (<div className={this.props.className}>
-            preview
+            {elements}
+            <button>submit</button>
         </div>)
     }
 });
