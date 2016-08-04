@@ -8,6 +8,11 @@ const App = React.createClass({
     toggle: function () {
         this.setState({isEditor: !this.state.isEditor});
     },
+    deleteElement:function (element) {
+        const elements = this.state.elements;
+        elements.splice(element,1);
+        this.setState({elements});
+    },
     addElement:function (element) {
       const elements = this.state.elements;
         elements.push(element);
@@ -17,7 +22,7 @@ const App = React.createClass({
         const isEditor = this.state.isEditor;
         return <div>
             <button onClick={this.toggle}>{isEditor ? 'Preview' : 'Editor'}</button>
-            <Editor className={isEditor ? '' : 'hidden'} elements = {this.state.elements} onAdd={this.addElement}/>
+            <Editor className={isEditor ? '' : 'hidden'} onDelete = {this.deleteElement} elements = {this.state.elements} onAdd={this.addElement}/>
             <Preview className={isEditor ? 'hidden' : ''}/>
         </div>
     }
@@ -25,17 +30,20 @@ const App = React.createClass({
 const Editor = React.createClass({
     render:function () {
         return <div className = {this.props.className}>
-            <Left elements = {this.props.elements}/>
+            <Left onDelete = {this.props.onDelete} elements = {this.props.elements}/>
             <Right onAdd={this.props.onAdd}/>
         </div>
     }
 });
 const Left = React.createClass({
+    remove:function (index) {
+      this.props.onDelete(index);
+    },
     render:function () {
         const elements = this.props.elements.map((ele,index)=>{
             return <div key = {index}>
                 <input type={ele}/>
-                <input type="button" value='-'/>
+                <input type="button" value='-' onClick={this.remove}/>
             </div>
         });
         return <div className = {this.props.className}>
