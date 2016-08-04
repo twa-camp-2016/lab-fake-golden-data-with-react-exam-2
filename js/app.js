@@ -1,10 +1,26 @@
 const App = React.createClass({
+
+    getInitialState :function () {
+        return {
+            isEditor :true,
+            elements :[]
+        }
+    },
+
+    toggle :function () {
+        this.setState({
+            isEditor:!this.state.isEditor
+        });
+    },
+
     render:function(){
+        const isEditor = this.state.isEditor;
         return <div>
-            <div>
+            <button onClick={this.toggle}>{isEditor? "Previewer" : "Editor"}</button>
+            <div className={isEditor? "" : "hidden"}>
                 <Editor />
             </div>
-            <div>
+            <div className={isEditor ? "hidden" : ""}>
                 <Previewer />
             </div>
         </div>
