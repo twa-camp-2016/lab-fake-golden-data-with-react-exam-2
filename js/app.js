@@ -25,11 +25,12 @@ const App = React.createClass({
         const isEditor = this.state.isEditor;
         return <div>
             <button onClick={this.toggle}>{isEditor?"Previwer":"Edit"}</button>
-            <div>
+            <div className={isEditor?"":"hidden"}>
                 <Editor elements={this.state.elements} onAdd={this.addElement} onDelete={this.deleteElement}/>
             </div>
-            <div>
-                
+            <div className={isEditor?"hidden":""}>
+
+                <Previwer elements={this.state.elements}/>
             </div>
         </div>
     }
@@ -75,5 +76,20 @@ const Right = React.createClass({
         </div>
     }
 });
+
+const Previwer = React.createClass({
+    render : function () {
+        const elements = this.props.elements.map((ele,index) => {
+            "use strict";
+            return <div key={index}>
+                <input type={ele}/>
+            </div>;
+        })
+        return <div>{elements}
+            <button>Submite</button>
+        </div>
+
+    }
+})
 
 ReactDOM.render(<App/>,document.getElementById('content'))
