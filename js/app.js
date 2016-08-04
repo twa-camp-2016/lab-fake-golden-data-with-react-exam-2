@@ -13,6 +13,11 @@ const App = React.createClass({
         elements.push(element);
         this.setState({elements});
     },
+    deleteElement:function(index){
+      const elements = this.state.elements;
+        elements.splice(index,1);
+        this.setState({elements});
+    },
 
     render: function () {
         const isEditor = this.state.isEditor;
@@ -21,7 +26,8 @@ const App = React.createClass({
 
             <div className={isEditor ? "" : "hidden"}>
                 <Editor elements={this.state.elements}
-                         onAdd={this.addElement}/>
+                         onAdd={this.addElement}
+                         onDelete={this.deleteElement}/>
             </div>
 
             <div className={isEditor ? "hidden" : ""}>
@@ -37,18 +43,21 @@ const Editor = React.createClass({
 
     render:function(){
         return <div>
-            <Left elements={this.props.elements}/>
+            <Left elements={this.props.elements} onDelete={this.props.onDelete}/>
             <Right onAdd={this.props.onAdd}/>
         </div>
     }
 });
 
 const Left = React.createClass({
+    remove:function(index){
+      this.props.onDelete(index)
+    },
     render:function(){
         const elements =this.props.elements.map((ele ,index)=>{
          return <div>
              <input type={ele}/>
-             <button>-</button>
+             <button onClick={this.remove.bind(this,index)}>-</button>
          </div>
         });
         return <div>{elements}</div>
@@ -59,7 +68,8 @@ const Left = React.createClass({
 const Right = React.createClass({
    add:function(){
        const element = $("input[name=element]:checked").val();
-     this.props.onAdd(element);
+
+       this.props.onAdd(element);
    },
   render:function(){
    return  <div>
