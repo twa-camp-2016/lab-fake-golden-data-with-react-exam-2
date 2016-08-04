@@ -24,8 +24,21 @@ const App = React.createClass({
 const Editor = React.createClass({
     render: function () {
         return (
-            <div>editor</div>
+            <div>
+                <Left/>
+                <Right/>
+            </div>
         );
+    }
+});
+const Left = React.createClass({
+    render:function () {
+        return (<div>left</div>);
+    }
+});
+const Right = React.createClass({
+    render:function () {
+        return (<div>right</div>);
     }
 });
 const Previewer = React.createClass({
