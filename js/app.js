@@ -19,7 +19,7 @@ const App = React.createClass({
       <div>
         <button onClick={this.toggle}>{this.state.isEditor ? "preview" : "edit"}</button>
         <div className={this.state.isEditor ? "" : "hidden"}>
-          <Edit onAdd={this.addElement}/>
+          <Edit onAdd={this.addElement} elements={this.state.elements}/>
         </div>
         <div className={this.state.isEditor ? "hidden" : ""}>
           <Preview />
@@ -33,7 +33,7 @@ const Edit = React.createClass({
   render: function () {
     return (
       <div>
-        <Left />
+        <Left elements={this.props.elements}/>
         <Right add={this.props.onAdd}/>
       </div>
     );
@@ -42,9 +42,12 @@ const Edit = React.createClass({
 
 const Left = React.createClass({
   render: function () {
+    const elements = this.props.elements.map((element,index)=>{
+      return <li key={index}><input type={element}/></li>
+    });
     return (
       <div>
-
+        {elements}
       </div>
     );
   }
