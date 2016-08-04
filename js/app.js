@@ -5,21 +5,32 @@ var App = React.createClass({
             isEditor: true
         }
     },
+    isChange:function () {
+        this.setState({
+            isEditor:!this.state.isEditor
+        });
+    },
     add: function (ele) {
         const elements = this.state.elements;
         elements.push(ele);
         this.setState(elements);
     },
+    delete: function (i) {
+        const elements = this.state.elements;
+        elements.splice(i, 1);
+        this.setState(elements);
+
+    },
     render: function () {
         const isEditor = this.state.isEditor;
         return (
             <div>
-                <button >{isEditor ? "Preview" : "editor"}</button>
+                <button  onClick={this.isChange}>{isEditor ? "Preview" : "editor"}</button>
                 <div className={isEditor ? " " : "hidden"}>
-                    <Editor onAdd={this.add}/>
+                    <Editor onAdd={this.add} onDelete={this.delete} elements={this.state.elements}/>
                 </div>
                 <div className={isEditor ? " hidden" : " "}>
-                    <Preview/>
+                    <Preview elements={this.state.elements}/>
                 </div>
             </div>
 
@@ -30,7 +41,7 @@ var Editor = React.createClass({
     render: function () {
         return (
             <div>
-                <Left/>
+                <Left elements={this.props.elements} onDelete={this.props.onDelete}/>
                 <Right onAdd={this.props.onAdd}/>
             </div>
 
@@ -56,19 +67,38 @@ var Right = React.createClass({
     }
 });
 var Left = React.createClass({
+    delete: function (i) {
+        this.props.onDelete(i);
+    },
     render: function () {
+        const elements = this.props.elements.map((e, i)=> {
+            return <div key={i}>
+                <input type={e}/>
+                <button onClick={this.delete.bind(this, i)}>-</button>
+            </div>
+
+
+        })
         return (
-        <div></div>
-           
+            <div>{elements}</div>
+
         )
     }
 });
 var Preview = React.createClass({
     render: function () {
+
+        const elements = this.props.elements.map((e, i)=> {
+            return <div key={i}><input type={e}/></div>
+
+        })
         return (
-            <div></div>
+            < div >
+                {elements}
+                <button>submmit</button>
+            </div >
 
         )
-    }
+}
 });
 ReactDOM.render(<App/>, document.getElementById('content'));
