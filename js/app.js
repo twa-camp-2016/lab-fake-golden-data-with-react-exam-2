@@ -25,10 +25,10 @@ const App = React.createClass({
             <button onClick={this.toggle}>{isEditor?"预览":"编辑"}</button>
             <div className={isEditor?"":"hidden"}>
                 <Left onDelete={this.deleteCount} counts={this.state.counts}></Left>
-                <Right onAdd={this.addCount}></Right>
+                <Right onAdd={this.addCount} ></Right>
             </div>
             <div className={isEditor?"hidden":""}>
-                <Preview></Preview>
+                <Preview counts={this.state.counts}></Preview>
             </div>
         </div>
     }
@@ -67,7 +67,15 @@ const Right = React.createClass({
 
 const Preview = React.createClass({
     render(){
-        return <div>p</div>
+        const counts=this.props.counts.map((count,index)=>{
+            return <div key={index}>
+                <input type={count}/>
+            </div>
+        })
+        return <div>
+            {counts}
+            <button>提交</button>
+        </div>
     }
 });
 
