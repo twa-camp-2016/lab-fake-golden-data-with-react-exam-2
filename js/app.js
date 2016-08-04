@@ -22,8 +22,12 @@ const App = React.createClass({
         const isEditor = this.state.isEditor;
         return <div>
             <button onClick={this.toggle}>{isEditor?"Preview":"Edit"}</button>
+            <div className={isEditor?"":"hidden"}>
             <Editor onAdd={this.addElement} elements = {this.state.elements}/>
+                </div>
+            <div className={isEditor?"hidden":""}>
             <Previewer/>
+                </div>
 
         </div>
     }
