@@ -27,6 +27,9 @@ const App = React.createClass({
             <div className={isEditor?"":"hidden"}>
                 <Editor elements={this.state.elements} onAdd={this.addElement} onDelete={this.deleteElement}/>
             </div>
+            <div className={isEditor?"hidden":""}>
+                <Preview elements={this.state.elements}/>
+            </div>
         </div>
 
     }
@@ -68,6 +71,20 @@ const Right = React.createClass({
             <input type="radio" name="element" value="Date"/>Date
             <button onClick={this.add}>+</button>
         </div>
+    }
+});
+
+const Preview=React.createClass({
+    render:function () {
+        const elements = this.props.elements.map((ele, index) => {
+            return <div key={index}>
+                <input type={ele}/>
+            </div>;
+        });
+        return <div>
+            {elements}
+            <button>Submit</button>
+        </div>;
     }
 });
 
