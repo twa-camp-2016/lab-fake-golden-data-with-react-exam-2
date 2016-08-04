@@ -13,6 +13,8 @@ const App = React.createClass({
         elements.push(element);
         
         this.setState({elements});
+        console.log(elements);
+
     },
     onRemove:function (i) {
         const elements = this.state.elements;
@@ -42,7 +44,7 @@ const Editor = React.createClass({
         return (
             <div>
                 <div>
-                    <Left onRemove={this.props.onRemove}/>
+                    <Left onRemove={this.props.onRemove} elements={this.props.elements}/>
                 </div>
                 <div>
                     <Right onAdd={this.props.onAdd}/>
