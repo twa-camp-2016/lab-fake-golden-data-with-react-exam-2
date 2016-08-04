@@ -63,7 +63,7 @@ const Right = React.createClass({
     add:function () {
       const element=$('input[name=element]:checked').val();
         this.props.onAdd(element);
-        console.log(element);
+       // console.log(element);
     },
    render:function () {
        return <div>
@@ -76,8 +76,14 @@ const Right = React.createClass({
 
 const Preview = React.createClass({
    render:function () {
+       const elements=this.props.elements.map((ele,index)=>{
+          return <div>
+              <input type={ele} />
+          </div>
+       });
        return <div>
-
+           {elements}
+           <button>submit</button>
        </div>
    }
 });
