@@ -84,6 +84,18 @@ var Left = React.createClass({
     }
 });
 var Preview = React.createClass({
+    render: function () {
+        const elements = this.props.elements.map((e, i)=> {
+            return <div key={i}>
+                <input type={e}/>
+            </div>
+        })
+        return (
+            <div>{elements}
+                <button>submit</button>
+            </div>
 
+        )
+    }
 });
 ReactDOM.render(<App/>, document.getElementById('content'));
