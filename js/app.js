@@ -1,3 +1,4 @@
+//'use 34 minuts'
 const App = React.createClass({
     getInitialState: function () {
         return ({
