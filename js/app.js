@@ -18,12 +18,17 @@ const App = React.createClass({
         this.setState({elements});
     },
 
+    addElement:function (element) {
+      const elements = this.state.elements;
+       elements.push(element)
+    },
+
     render:function(){
         const isEditor = this.state.isEditor;
         return <div>
             <button onClick={this.toggle}>{isEditor?"Previewer" : "Editor"}</button>
             <div className={isEditor? "" : "hidden"}>
-            <Editor elements = {this.state.elements} onDelete = {this.deleteElement}/>
+            <Editor elements = {this.state.elements} onDelete = {this.deleteElement} onAdd = {this.addElement}/>
                 </div>
             <div className={isEditor? "hidden" : ""}>
             <Previewer />
@@ -36,7 +41,7 @@ const Editor = React.createClass({
     render:function(){
         return <div>
             <Left elements = {this.props.elements} onDelete = {this.props.onDelete}/>
-            <Right />
+            <Right onAdd = {this.props.onAdd}/>
         </div>
         }
 });
