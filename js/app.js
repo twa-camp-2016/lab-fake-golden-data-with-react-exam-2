@@ -66,7 +66,15 @@ const Right = React.createClass({
 
 const Preview  = React.createClass({
     render(){
-      
+        const counts=this.props.counts.map((count,index)=>{
+            return <div key={index}>
+                <input type={count}/>
+            </div>
+        })
+        return <div>
+            {counts}
+            <button>提交</button>
+        </div>
     }
 });
 
