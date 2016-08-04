@@ -1,6 +1,9 @@
 const App = React.createClass({
     getInitialState:function(){
-      return { isEditor:true}
+      return {
+          isEditor:true,
+          elements:'test'
+      }
     },
     toggle:function(){
       this.setState({isEditor:!this.state.isEditor});
@@ -10,8 +13,9 @@ const App = React.createClass({
         const isEditor = this.state.isEditor;
         return <div>
             <button onClick={this.toggle}>{isEditor ? "Preview" : "Editor"}</button>
+
             <div className={isEditor ? "" : "hidden"}>
-                <Editor />
+                <Editor elements={this.state.elements}/>
             </div>
 
             <div className={isEditor ? "hidden" : ""}>
@@ -27,9 +31,27 @@ const Editor = React.createClass({
 
     render:function(){
         return <div>
-            Editor
+            <Left elements={this.props.elements}/>
+            <Right />
         </div>
     }
+})
+
+const Left = React.createClass({
+    render:function(){
+        console.log(this.props.elements);
+        return <div>{this.props.elements}</div>
+    }
+})
+
+const Right = React.createClass({
+
+  render:function(){
+   return  <div>
+
+   </div>
+  }
+
 })
 
 
