@@ -10,11 +10,15 @@ const App = React.createClass({
         this.state.elements.push(ele);
         this.setState(this.state.elements);
     },
+    removeEle:function (index) {
+        this.state.elements.splice(index, 1);
+        this.setState(this.state.elements);
+    },
     render:function(){
         return <div>
             <button onClick={this.handleChange}>{this.state.isEditor?'Preview':'Edit'}</button>
             <div className={this.state.isEditor?'':'hidden'}>
-                <Editor elements={this.state.elements} onAdd={this.addEle}/>
+                <Editor elements={this.state.elements} onAdd={this.addEle} onDelete={this.removeEle}/>
             </div>
             <div className={this.state.isEditor?'hidden':''}>
                 <Preview/>
@@ -27,7 +31,7 @@ const Editor = React.createClass({
     render:function(){
         return <div>
             <Right onAdd={this.props.onAdd}/>
-            <Left elements={this.props.elements}/>
+            <Left elements={this.props.elements} onDelete={this.props.onDelete}/>
         </div>
     }
 });
@@ -47,11 +51,14 @@ const Right = React.createClass({
 });
 
 const Left = React.createClass({
+    remove:function (index) {
+        this.props.onDelete(index);
+    },
     render:function(){
         return <div>
             {this.props.elements.map((ele,index)=>{
                 return <div key={index}>
-                    <input type={ele}/><button>X</button>
+                    <input type={ele}/><button onClick={this.remove.bind(this, index)}>X</button>
                 </div>
             })}
         </div>
