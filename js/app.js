@@ -10,7 +10,12 @@ var App = React.createClass({
     },
     addElement:function (element) {
         const elements=this.state.elements;
-        elements.push(element)
+        elements.push(element);
+        this.setState(elements);
+    } ,
+    deleteElement:function (index) {
+        const elements=this.state.elements;
+        elements.splice(index,1);
         this.setState(elements);
     },
     render: function () {
@@ -20,7 +25,7 @@ var App = React.createClass({
             <div>
                 <button onClick={this.isChange}>{isEditor ? 'preview' : 'editor'}</button>
                 <div className={isEditor ? '' : "hidden"}>
-                    <Editor onAdd={this.addElement}/>
+                    <Editor onAdd={this.addElement} onDelete={this.deleteElement} elements={this.state.elements}/>
                 </div>
                 <div className={isEditor ? 'hidden' : " "}>
                     <Preview/>
@@ -37,7 +42,7 @@ var Editor = React.createClass({
         return (
         <div>
             <Right onAdd={this.props.onAdd}/>
-            <Left/>
+            <Left onDelete={this.props.onDelete} elements={this.props.elements}/>
         </div>
            
         )
@@ -47,7 +52,7 @@ var Editor = React.createClass({
 var Right = React.createClass({
     add:function () {
       const element=$("input[name=input]:checked").val();
-        this.props.elements.onAdd(element);
+        this.props.onAdd(element);
     },
     render: function () {
         return (
@@ -62,9 +67,18 @@ var Right = React.createClass({
 });
 
 var Left = React.createClass({
+    delete:function (i) {
+      this.props.onDelete(i)
+    },
     render: function () {
+        const elements=this.props.elements.map((e,i)=>{
+            return<div key={i}>
+                <input type={e}/>
+                <button onClick={this.delete.bind(this,i)}>x</button>
+            </div>
+        })
         return (
-        <div></div>
+        <div>{elements}</div>
 
         )
     }
