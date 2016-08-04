@@ -45,7 +45,11 @@ const Left = React.createClass({
 
 const Right = React.createClass({
     render:function(){
-        return <div>Right</div>
+        return <div>
+            <input type="radio" name="element" value="text"/>Text
+            <input type="radio" name="element" value="date"/>Date
+            <button>+</button>
+        </div>
     }
 });
 
