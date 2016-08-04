@@ -23,10 +23,10 @@ getInitialState:function () {
     const isEditor = this.state.isEditor;
        return <div>
             <button onClick={this.toggle}>{isEditor?'Preview':'Editor'}</button>
-           <div>
+           <div className={isEditor? '':'hidden'}>
                <Editor elements={this.state.elements} onAdd={this.addElement} onDelete={this.deleteElement} />
            </div>
-           <div>
+           <div className={isEditor?'hidden':''}>
                <Preview elements={this.state.elements}/>
            </div>
        </div>
@@ -43,9 +43,18 @@ const Editor = React.createClass({
 });
 
 const Left = React.createClass({
+    remove:function (index) {
+      this.props.onDelete(index);
+    },
    render:function () {
+   const elements = this.props.elements.map((ele,index)=>{
+   return <div>
+       <input type={ele} />
+       <button onClick={this.remove.bind(this,index)}>X</button>
+   </div>
+   });
        return <div>
-
+           {elements}
        </div>
    }
 });
