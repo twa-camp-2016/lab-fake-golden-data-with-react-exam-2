@@ -1,41 +1,48 @@
- const App = React.createClass({
+const App = React.createClass({
+    getInitialState: function () {
+        return {isEditor: true}
+    },
+    toggle: function () {
+        this.setState({isEditor:!this.state.isEditor });
+    },
+    render: function () {
+        const isEditor = this.state.isEditor;
+        return <div>
+            <button onClick={this.toggle}>{isEditor ? "Preview" : "Editor"}</button>
 
-   render:function(){
-    return <div>
-        <button>Preview</button>
+            <div className={isEditor ? "" : "hidden"}>
+                <Editor />
+            </div>
 
-        <div>
-            <Editor />
+            <div className={isEditor ? "hidden" : ""}>
+                <Previewer />
+            </div>
+
         </div>
+    }
+})
 
-        <div>
-            <Previewer />
+
+const Editor = React.createClass({
+
+    render: function () {
+        return <div>
+            Editor
         </div>
-
-    </div>
-   }
- })
+    }
+})
 
 
- const Editor = React.createClass({
+const Previewer = React.createClass({
 
-   render:function(){
-    return   <div>
-        Editor
-    </div>
-   }
+    render:function(){
+        return    <div>
+            Previewer
+        </div>
+    }
 
- });
+})
 
 
- const Previewer = React.createClass({
 
-   render:function(){
-    return    <div>
-        Previewer
-    </div>
-   }
-
- })
-
- ReactDOM.render(<App />,document.getElementById('content'));
+ReactDOM.render(<App />, document.getElementById('content'));
