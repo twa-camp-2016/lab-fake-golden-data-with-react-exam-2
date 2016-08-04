@@ -37,12 +37,29 @@ const App = React.createClass({
 const Editor = React.createClass({
     render: function () {
         return <div>
-            
+            <Left elements={this.props.elements} onDelete={this.props.onDelete} />
             <Right onAdd={this.props.onAdd}/>
         </div>;
     }
 });
 
+const Left = React.createClass({
+    remove: function(index) {
+        this.props.onDelete(index);
+    },
+    render: function() {
+        const elements = this.props.elements.map((ele, index) => {
+            return <div key={index}>
+                <input type={ele}/>
+                <button onClick={this.remove.bind(this, index)}>X</button>
+            </div>;
+        });
+
+        return <div>
+            {elements}
+        </div>
+    }
+});
 
 const Right = React.createClass({
     add: function () {
