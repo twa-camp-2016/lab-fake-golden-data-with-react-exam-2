@@ -28,7 +28,7 @@ const App = React.createClass({
                 <Right onAdd={this.addCount}></Right>
             </div>
             <div className={isEditor?"hidden":""}>
-                <Preview></Preview>
+                <Preview counts={this.state.counts}></Preview>
             </div>
         </div>
     }
@@ -67,7 +67,15 @@ const Right = React.createClass({
 
 const Preview = React.createClass({
     render(){
-        return <div>Pr</div>
+        const counts=this.props.counts.map((count,index)=>{
+            return <div key={index}>
+                <input type={count}/>
+            </div>
+        })
+        return <div>
+            {counts}
+            <button>提交</button>
+        </div>
     }
 });
 
