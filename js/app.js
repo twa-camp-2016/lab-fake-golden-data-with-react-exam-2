@@ -11,12 +11,12 @@ const App = React.createClass({
     addElement:function (element) {
         const elements=this.state.elements;
         elements.push(element);
-        this.setState({element});
+        this.setState({elements});
     },
     deleteElement:function (index) {
         const elements=this.state.elements;
         elements.splice(index,1);
-        this.setState({element});
+        this.setState({elements});
     },
    render:function () {
         const isEditor = this.state.isEditor;
@@ -43,8 +43,20 @@ const Editor = React.createClass({
 });
 
 const Left = React.createClass({
+    remove:function (index) {
+        this.props.onDelete(index);
+    },
    render:function () {
-       return<div></div>
+       const elements = this.props.elements.map((ele,index)=>{
+          return <div>
+              <input type={ele}/>
+              <button onClick={this.remove.bind(this,index)}>X</button>
+          </div>
+       });
+
+       return<div>
+           {elements}
+       </div>
    }
 });
 
