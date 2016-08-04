@@ -8,13 +8,20 @@ const App = React.createClass({
     toggle(){
       this.setState({isEditor:!this.state.isEditor});
     },
+    addCount(count){
+        const counts = this.state.counts;
+        counts.push(count);
+        this.setState({counts})
+
+        console.log(counts)
+    },
     render(){
         const isEditor=this.state.isEditor
         return <div>
             <button onClick={this.toggle}>{isEditor?"预览":"编辑"}</button>
             <div className={isEditor?"":"hidden"}>
                 <Left></Left>
-                <Right></Right>
+                <Right onAdd={this.addCount}></Right>
             </div>
             <div className={isEditor?"hidden":""}>
                 <Preview></Preview>
@@ -30,8 +37,16 @@ const Left = React.createClass({
 });
 
 const Right = React.createClass({
+    add(){
+        const count = $("input[name=input]:checked").val()
+        this.props.onAdd(count)
+    },
     render(){
-        return <div>r</div>
+        return <div>
+            <input type="radio" name="input" value="text"/>Text
+            <input type="radio" name="input" value="date"/>Date
+            <button onClick={this.add}>+</button>
+        </div>
     }
 });
 
