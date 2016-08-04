@@ -8,9 +8,15 @@ var App = React.createClass({
     change: function () {
         this.setState({isEditor: !this.state.isEditor})
     },
-    add:function (ele) {
-        const elements=this.state.elements;
+    add: function (ele) {
+        const elements = this.state.elements;
         elements.push(ele);
+        this.setState(elements);
+
+    },
+    delete: function (i) {
+        const elements = this.state.elements;
+        elements.splice(i, 1);
         this.setState(elements);
 
     },
@@ -23,7 +29,7 @@ var App = React.createClass({
                     <Editor onAdd={this.add} onDelete={this.delete} elements={this.state.elements}/>
                 </div>
                 <div className={isEditor ? "hidden " : ""}>
-                    <Preview/>
+                    <Preview elements={this.state.elements}/>
                 </div>
             </div>
 
@@ -36,7 +42,7 @@ var Editor = React.createClass({
         return (
             <div>
                 <Right onAdd={this.props.onAdd}/>
-                <Left/>
+                <Left elements={this.props.elements} onDelete={this.props.onDelete}/>
             </div>
 
         )
@@ -44,36 +50,40 @@ var Editor = React.createClass({
 });
 
 var Right = React.createClass({
-    add:function () {
-        const ele=$("input[name=input]:checked").val();
+    add: function () {
+        const ele = $("input[name=input]:checked").val();
         this.props.onAdd(ele);
     },
     render: function () {
         return (
-        <div>
-            <input type="radio" name="input" value="text"/>文本框
-            <input type="radio" name="input" value="date"/>日期
-            <button onClick={this.add}>+</button>
-        </div>
+            <div>
+                <input type="radio" name="input" value="text"/>文本框
+                <input type="radio" name="input" value="date"/>日期
+                <button onClick={this.add}>+</button>
+            </div>
 
 
         )
     }
 });
 var Left = React.createClass({
+    delete: function (i) {
+        this.props.onDelete(i);
+    },
     render: function () {
+        const elements = this.props.elements.map((e, i)=> {
+            return <div key={i}>
+                <input type={e}/>
+                <button onClick={this.delete.bind(this, i)}>X</button>
+            </div>
+        })
         return (
-        <div></div>
-           
+            <div>{elements}</div>
+
         )
     }
 });
 var Preview = React.createClass({
-    render: function () {
-        return (
-            <div></div>
 
-        )
-    }
 });
 ReactDOM.render(<App/>, document.getElementById('content'));
