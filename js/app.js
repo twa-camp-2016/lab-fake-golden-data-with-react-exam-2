@@ -10,15 +10,20 @@ const App = React.createClass({
         this.state.elements.push(ele);
         this.setState(this.state.elements);
     },
+    remove: function (index) {
+        this.state.elements.splice(index, 1);
+        this.setState(this.state.elements);
+    },
+
     render: function () {
         var editor = this.state.isEditor;
         return <div>
             <button onClick={this.handleChange}>{editor ? 'Preview' : 'Edit'}</button>
             <div className={editor ? '' : 'hidden'}>
-                <Editor elements={this.state.elements} onAdd={this.addEle}/>
+                <Editor elements={this.state.elements} onAdd={this.addEle} onDelete={this.remove}/>
             </div>
             <div className={editor ? 'hidden' : ''}>
-                <Preview />
+                <Preview elements={this.state.elements}/>
             </div>
         </div>
     }
@@ -28,7 +33,7 @@ const Editor = React.createClass({
     render: function () {
         return <div>
             <Right onAdd={this.props.onAdd}/>
-            <Left elements={this.props.elements}/>
+            <Left elements={this.props.elements} onDelete={this.props.onDelete}/>
         </div>
     }
 });
@@ -48,11 +53,15 @@ const Right = React.createClass({
 });
 
 const Left = React.createClass({
+    remove: function (index) {
+        this.props.onDelete(index);
+    },
     render: function () {
         return <div>
-            {this.props.elements.map((ele,index)=>{
+            {this.props.elements.map((ele, index)=> {
                 return <div key={index}>
-                    <input type={ele}/><button>X</button>
+                    <input type={ele}/>
+                    <button onClick={this.remove.bind(this, index)}>X</button>
                 </div>
             })}
         </div>
@@ -61,7 +70,14 @@ const Left = React.createClass({
 
 const Preview = React.createClass({
     render: function () {
-        return <div>Preview</div>
+        return <div>
+            {this.props.elements.map((ele, index) => {
+                return <div key={index}>
+                    <input type={ele}/>
+                </div>
+            })}
+            <button>submit</button>
+        </div>
     }
 });
 
