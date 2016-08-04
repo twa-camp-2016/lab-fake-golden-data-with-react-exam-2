@@ -76,8 +76,14 @@ const Right = React.createClass({
 
 const Preview = React.createClass({
    render:function () {
+       const elements=this.props.elements.map((ele,index)=>{
+          return<div>
+              <input type={ele} />
+          </div>
+       });
        return <div>
-
+           {elements}
+           <button>Submit</button>
        </div>
    }
 });
