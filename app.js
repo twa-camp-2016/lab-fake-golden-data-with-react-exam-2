@@ -27,7 +27,7 @@ const App = React.createClass({
                 <Editor elements={this.state.elements} onadd={this.addElement} onDelete={this.deleteElements}/>
             </div>
             <div className={this.state.isEditor ? "hidden" : ""}>
-                <Preview />
+                <Preview elements={this.state.elements} />
             </div>
         </div>;
     }
@@ -75,7 +75,15 @@ const Right = React.createClass({
 });
 const Preview = React.createClass({
     render: function () {
-        return <div>Preview</div>
+        const elements = this.props.elements.map((ele, index)=> {
+            return <div key={index}>
+                <input type={ele}/>
+            </div>;
+        });
+        return <div>
+            {elements}
+            <button>summit</button>
+        </div>
     }
 });
 
