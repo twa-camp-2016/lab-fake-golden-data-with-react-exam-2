@@ -21,18 +21,25 @@ const App = React.createClass({
 
     render: function () {
         const isEditor = this.state.isEditor;
-        return <div>
-            <button onClick={this.toggle}>{isEditor ? "Preview" : "Editor"}</button>
 
-            <div className={isEditor ? "" : "hidden"}>
+        return <div className="full">
 
-                <Editor elements={this.state.elements}
-                        onAdd={this.addElement}
-                        onDelete={this.deleteElement}/>
+            <div className=" col-1g-1 topBotton col-sm-offset-6">
+                <button onClick={this.toggle} className=" btn btn-info">{isEditor ? "Preview" : "Editor"}</button>
             </div>
 
-            <div className={isEditor ? "hidden" : ""}>
-                <Previewer elements={this.state.elements}/>
+            <div className="preview">
+                <div className={isEditor ? "" : "hidden"}>
+                    <Editor elements={this.state.elements}
+                            onAdd={this.addElement}
+                            onDelete={this.deleteElement}/>
+                </div>
+            </div>
+
+            <div className="col-sm-8 col-sm-offset-2 ">
+                <div className={isEditor ? "hidden" : ""}>
+                    <Previewer elements={this.state.elements}/>
+                </div>
             </div>
         </div>
     }
@@ -42,8 +49,13 @@ const Editor = React.createClass({
 
     render: function () {
         return <div>
-            <Left elements={this.props.elements} onDelete={this.onDelete}/>
-            <Right onAdd={this.props.onAdd}/>
+            <div className="left">
+                <Left elements={this.props.elements} onDelete={this.props.onDelete}/>
+            </div>
+
+            <div>
+                <Right onAdd={this.props.onAdd}/>
+            </div>
         </div>
     }
 });
@@ -55,12 +67,19 @@ const Left = React.createClass({
     render: function () {
         const elements = this.props.elements.map((ele)=> {
             return <div>
-                <input type={ele}/>
-                <buton onClick={this.remove.bind(this.index)}>-</buton>
+                <div className="editorItem">
+                    <div className="input-group">
+                        <input type={ele} className="form-control"/>
+                        <span className="input-group-btn">
+            <button className="btn btn-danger" onClick={this.remove.bind(this.index)}>-</button>
+            </span>
+                    </div>
+                </div>
+
             </div>
         })
 
-        return <div>
+        return <div className="col-sm-4 col-sm-offset-2">
             {elements}
         </div>
     }
@@ -68,14 +87,19 @@ const Left = React.createClass({
 
 const Right = React.createClass({
     add: function () {
-        const element = $("input[name=element]:checked").val();
-        this.props.onAdd(element)
+        let element = $("input[name=element]:checked").val();
+        element = element === undefined ? "" : this.props.onAdd(element);
+
     },
     render: function () {
-        return <div>
-            <input type="radio" name="element" value="text"/>Text
-            <input type="radio" name="element" value="date"/>date
-            <button onClick={this.add}>+</button>
+        return <div className="row right">
+            <div className="col-sm-2 col-lg-offset-2">
+                <input type="radio" name="element" className="item" value="text"/>Text
+                <input type="radio" name="element" className=" item" value="date"/>date
+                <div>
+                    <button onClick={this.add} className="item btn btn-success">+</button>
+                </div>
+            </div>
         </div>
     }
 
@@ -85,13 +109,25 @@ const Previewer = React.createClass({
 
     render: function () {
         const elements = this.props.elements.map((ele, index) => {
-            return <div>
-                <input type={ele}/>
+            return <div key={index} className="PreviewItem col-sm-5 col-sm-offset-4">
+                <input type={ele} className="form-control"/>
             </div>
         });
-        return <div> {elements}</div>
+        return <div>
+            <div className="editor">
+                {elements}
+            </div>
+            <button className="btn btn-warning col-sm-1 col-sm-offset-6">submit</button>
+        </div>
     }
 
 })
 
-ReactDOM.render(<App />, document.getElementById("content"));
+ReactDOM.render(
+    <Router>
+        <Route path="/" component={App}>
+         <Route  path="editor" component={Editor}/>
+         <Route path="previewer" component={Previewer}/>
+        </Route>
+    </Router>
+    , document.getElementById("content"));
