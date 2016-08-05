@@ -1,6 +1,20 @@
 const App = React. createClass({
+    getInitialState:function () {
+      return {
+          isEditor:true,
+          elements:[]
+      }
+    },
+    toggle:function () {
+        this.setState({
+            isEditor:this.state.isEditor
+        })
+    },
     render:function () {
-        return <div>hello</div>
+        const isEditor = this.state.isEditor;
+        return <div>
+            <button onClick={this.toggle}>{isEditor?"Previewer":"Editor"}</button>
+        </div>
     }
 })
 
