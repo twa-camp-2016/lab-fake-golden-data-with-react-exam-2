@@ -1,12 +1,14 @@
+const Router = ReactRouter.Router;
+const Route = ReactRouter.Route;
+const Link = ReactRouter.Link;
+const IndexRoute = ReactRouter.IndexRoute;
+
 const App = React.createClass({
     getInitialState(){
         return {
             isEditor: true,
             elements: []
         }
-    },
-    toggle: function () {
-        this.setState({isEditor: !this.state.isEditor});
     },
     addElement: function (element) {
         this.state.elements.push(element);
@@ -18,18 +20,12 @@ const App = React.createClass({
     },
     render: function () {
         return <div>
-            <div id="topButton">
-                <center>
-                    <button type="button" className="btn btn-primary"
-                            onClick={this.toggle}>{this.state.isEditor ? 'preview' : 'edit'}</button>
-                </center>
-            </div>
-            <div className={this.state.isEditor ? '' : 'hidden'}>
-                <Editor elements={this.state.elements} addElement={this.addElement} deleteElement={this.deleteElement}/>
-            </div>
-            <div className={this.state.isEditor ? 'hidden' : ''}>
-                <Preview elements={this.state.elements}/>
-            </div>
+            {this.props.children && React.cloneElement(this.props.children, {
+                    elements: this.state.elements,
+                    addElement: this.addElement,
+                    deleteElement: this.deleteElement
+                }
+            )}
         </div>
     }
 });
@@ -44,6 +40,11 @@ const Preview = React.createClass({
             </div>
         });
         return <div id="preview">
+            <div id="topButton">
+                <center>
+                    <Link to="/">edit</Link>
+                </center>
+            </div>
             <div id="elements" className="row">
                 <br/>
                 {elements}
@@ -60,6 +61,11 @@ const Preview = React.createClass({
 const Editor = React.createClass({
     render: function () {
         return <div className="row">
+            <div id="topButton">
+                <center>
+                    <Link to="/preview">preview</Link>
+                </center>
+            </div>
             <Left elements={this.props.elements} deleteElement={this.props.deleteElement}/>
             <Right addElement={this.props.addElement}/>
         </div>
@@ -107,4 +113,11 @@ const Right = React.createClass({
     }
 });
 
-ReactDOM.render(< App />, document.getElementById('content'));
+ReactDOM.render(
+    <Router>
+        <Route path="/" component={App}>
+            <IndexRoute component={Editor}/>
+            <Route path="preview" component={Preview}/>
+        </Route>
+    </Router>
+    , document.getElementById('content'));
