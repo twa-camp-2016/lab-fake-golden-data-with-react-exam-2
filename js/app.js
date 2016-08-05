@@ -1,13 +1,10 @@
 const App = React.createClass({
     getInitialState: function () {
         return {
-            isEditor: true,
             elements: []
         }
     },
-    toggle: function () {
-        this.setState({isEditor: !this.state.isEditor});
-    },
+
     addElement: function (element) {
         const elements = this.state.elements;
         elements.push(element);
@@ -20,27 +17,15 @@ const App = React.createClass({
     },
 
     render: function () {
-        const isEditor = this.state.isEditor;
 
-        return <div className="full">
-
-            <div className=" col-1g-1 topBotton col-sm-offset-6">
-                <button onClick={this.toggle} className=" btn btn-info">{isEditor ? "Preview" : "Editor"}</button>
-            </div>
-
-            <div className="preview">
-                <div className={isEditor ? "" : "hidden"}>
-                    <Editor elements={this.state.elements}
-                            onAdd={this.addElement}
-                            onDelete={this.deleteElement}/>
-                </div>
-            </div>
-
-            <div className="col-sm-8 col-sm-offset-2 ">
-                <div className={isEditor ? "hidden" : ""}>
-                    <Previewer elements={this.state.elements}/>
-                </div>
-            </div>
+        return  <div>
+            {
+                this.props.children && React.cloneElement(this.props.children,{
+                    onAdd:this.addElement,
+                    onDelete:this.deleteElement,
+                    elements:this.state.elements
+                })
+            }
         </div>
     }
 });
@@ -49,6 +34,10 @@ const Editor = React.createClass({
 
     render: function () {
         return <div>
+            <ReactRouter.Link to="/Previewer">
+                <button>Preview</button>
+            </ReactRouter.Link>
+
             <div className="left">
                 <Left elements={this.props.elements} onDelete={this.props.onDelete}/>
             </div>
@@ -114,6 +103,9 @@ const Previewer = React.createClass({
             </div>
         });
         return <div>
+            <ReactRouter.Link to="/">
+                <button>Edit</button>
+            </ReactRouter.Link>
             <div className="editor">
                 {elements}
             </div>
@@ -124,10 +116,10 @@ const Previewer = React.createClass({
 })
 
 ReactDOM.render(
-    <Router>
-        <Route path="/" component={App}>
-         <Route  path="editor" component={Editor}/>
-         <Route path="previewer" component={Previewer}/>
-        </Route>
-    </Router>
+    <ReactRouter.Router>
+        <ReactRouter.Route path="/" component={App}>
+         <ReactRouter.IndexRoute component={Editor}/>
+         <ReactRouter.Route path="previewer" component={Previewer}/>
+        </ReactRouter.Route>
+    </ReactRouter.Router>
     , document.getElementById("content"));
