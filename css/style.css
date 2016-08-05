@@ -1,0 +1,28 @@
+#topButton{
+    margin-top: 30px;
+}
+
+#right {
+    float: right;
+    margin-top: 100px;
+}
+
+#left {
+    margin-top: 100px;
+}
+
+#elements {
+    margin-top: 30px;
+    border: solid 1px silver;
+    margin-left: 300px;
+    margin-right: 300px;
+}
+
+#submit {
+    margin-top: 30px;
+}
+
+#right input {
+    width: 15px;
+    height: 15px;;
+}

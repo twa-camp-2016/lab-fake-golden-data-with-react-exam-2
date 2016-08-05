@@ -18,7 +18,12 @@ const App = React.createClass({
     },
     render: function () {
         return <div>
-            <button onClick={this.toggle}>{this.state.isEditor ? 'preview' : 'edit'}</button>
+            <div id="topButton">
+                <center>
+                    <button type="button" className="btn btn-primary"
+                            onClick={this.toggle}>{this.state.isEditor ? 'preview' : 'edit'}</button>
+                </center>
+            </div>
             <div className={this.state.isEditor ? '' : 'hidden'}>
                 <Editor elements={this.state.elements} addElement={this.addElement} deleteElement={this.deleteElement}/>
             </div>
@@ -32,22 +37,31 @@ const App = React.createClass({
 const Preview = React.createClass({
     render: function () {
         const elements = this.props.elements.map((ele, index) => {
-            return <div key={index}>
-                <input type={ele}/>
+            return <div className="col-lg-6 input-group col-lg-offset-3" key={index}>
+                <input className="form-control" type={ele}/>
+                <br/>
+                <br/>
             </div>
         });
-        return <div>
-            {elements}
-            <button disabled>submit</button>
+        return <div id="preview">
+            <div id="elements" className="row">
+                <br/>
+                {elements}
+            </div>
+            <div id="submit">
+                <center>
+                    <button type="button" className="btn btn-success" disabled="disabled">submit</button>
+                </center>
+            </div>
         </div>
     }
 });
 
 const Editor = React.createClass({
     render: function () {
-        return <div>
-            <Right addElement={this.props.addElement}/>
+        return <div className="row">
             <Left elements={this.props.elements} deleteElement={this.props.deleteElement}/>
+            <Right addElement={this.props.addElement}/>
         </div>
     }
 });
@@ -58,16 +72,19 @@ const Left = React.createClass({
     },
     render: function () {
         const elements = this.props.elements.map((ele, index) => {
-            return <div key={index}>
-                <input type={ele}/>
-                <button onClick={this.remove.bind(this, index)}>X</button>
+            return <div className="col-lg-6 input-group col-sm-offset-2" key={index}>
+                <input type={ele} className="form-control"/>
+                <span className="input-group-btn">
+                <button type="button" className="btn btn-danger" onClick={this.remove.bind(this, index)}>X</button>
+                    </span>
+                <br/>
             </div>
         });
-        return <div>
+        return <div className="col-md-6" id="left">
             {elements}
         </div>
     }
-})
+});
 
 const Right = React.createClass({
     addElement: function () {
@@ -75,12 +92,19 @@ const Right = React.createClass({
         this.props.addElement(element);
     },
     render: function () {
-        return <div>
-            <input type="radio" name="element" value="text"/>text
-            <input type="radio" name="element" value="date"/>date
-            <button onClick={this.addElement}>+</button>
+        return <div className="col-md-6" id="right">
+            <label className="checkbox-inline col-sm-offset-1">
+                <input type="radio" name="element" value="text"/>text
+            </label>
+            <label className="checkbox-inline col-sm-offset-1">
+                <input type="radio" name="element" value="date"/>date
+            </label>
+            <div className="col-sm-offset-1 col-sm-10">
+                <br/>
+                <button className="btn btn-default" onClick={this.addElement}>添加</button>
+            </div>
         </div>
     }
-})
+});
 
 ReactDOM.render(< App />, document.getElementById('content'));
