@@ -1,5 +1,5 @@
 const App = React.createClass({
-    getInitialState: function() {
+    getInitialState: function () {
         return {
             isEditor: true,
             elements: []
@@ -10,7 +10,7 @@ const App = React.createClass({
             isEditor: !this.state.isEditor
         });
     },
-    addElement: function(element) {
+    addElement: function (element) {
         const elements = this.state.elements;
         elements.push(element);
         this.setState({elements});
@@ -20,15 +20,19 @@ const App = React.createClass({
         elements.splice(index, 1);
         this.setState({elements});
     },
-    render: function() {
+    render: function () {
         const isEditor = this.state.isEditor;
-        return <div>
-            <button onClick={this.toggle}>{isEditor ? "Preview" : "Edit"}</button>
+        return <div className="container">
+            <div className="title container-fluid" id="edit">
+                <center><input type="button" onClick={this.toggle} value={isEditor ? "Preview" : "Edit"}
+                               className="btn btn-info"/>
+                </center>
+            </div>
             <div className={isEditor ? "" : "hidden"}>
-                <Editor elements={this.state.elements} onAdd={this.addElement} onDelete={this.deleteElement} />
+                <Editor elements={this.state.elements} onAdd={this.addElement} onDelete={this.deleteElement}/>
             </div>
             <div className={isEditor ? "hidden" : ""}>
-                <Previewer elements={this.state.elements} />
+                <Previewer elements={this.state.elements}/>
             </div>
         </div>;
     }
@@ -36,22 +40,28 @@ const App = React.createClass({
 
 const Editor = React.createClass({
     render: function () {
-        return <div>
-            <Left elements={this.props.elements} onDelete={this.props.onDelete} />
-            <Right onAdd={this.props.onAdd}/>
-        </div>;
+        return <p className="editor">
+            <div className="left ">
+                <Left elements={this.props.elements} onDelete={this.props.onDelete}/>
+            </div>
+            <div className="right">
+                <Right onAdd={this.props.onAdd}/>
+            </div>
+        </p>;
     }
 });
 
 const Left = React.createClass({
-    remove: function(index) {
+    remove: function (index) {
         this.props.onDelete(index);
     },
-    render: function() {
+    render: function () {
         const elements = this.props.elements.map((ele, index) => {
             return <div key={index}>
-                <input type={ele}/>
-                <button onClick={this.remove.bind(this, index)}>X</button>
+                <div className="">
+                    <input type={ele} className="input-lg  spacing"/>
+                    <button onClick={this.remove.bind(this, index)} className="btn-danger input-lg">X</button>
+                </div>
             </div>;
         });
 
@@ -66,28 +76,33 @@ const Right = React.createClass({
         const element = $("input[name=element]:checked").val();
         this.props.onAdd(element);
     },
-    render: function() {
-        return <div>
-            <input type="radio" name="element" value="text" />Text
-            <input type="radio" name="element" value="date" />Date
-            <button onClick={this.add}>+</button>
+    render: function () {
+        return <div className="left">
+            <input type="radio" name="element" value="text"/>Text<br/>
+            <input type="radio" name="element" value="date"/>Date<br/>
+            <button onClick={this.add} className="btn btn-info">add a type</button>
         </div>
     }
 });
 
 const Previewer = React.createClass({
 
-        render:function(){ const elements = this.props.elements.map((ele, index) => {
-            return <div key={index}>
-                <input type={ele}/>
-            </div>;
+    render: function () {
+        const elements = this.props.elements.map((ele, index) => {
+            return <div key={index} >
+                <center className="spacing">
+                    <input type={ele} className="input-lg"/>
+                </center>
+            </div>
         });
-            return <div>
-                {elements}
+        return <div className="form-group ">
+            {elements}
+            <center className="submit">
+                <button className="btn btn-success spacing" disabled="disabled">Submit</button>
+            </center>
         </div>;
     }
 });
-
 
 
 ReactDOM.render(<App />, document.getElementById('content'));
