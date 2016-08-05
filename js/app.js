@@ -22,6 +22,23 @@ const App = React.createClass({
             <div className={this.state.isEditor ? '' : 'hidden'}>
                 <Editor elements={this.state.elements} addElement={this.addElement} deleteElement={this.deleteElement}/>
             </div>
+            <div className={this.state.isEditor ? 'hidden' : ''}>
+                <Preview elements={this.state.elements}/>
+            </div>
+        </div>
+    }
+});
+
+const Preview = React.createClass({
+    render: function () {
+        const elements = this.props.elements.map((ele, index) => {
+            return <div key={index}>
+                <input type={ele}/>
+            </div>
+        });
+        return <div>
+            {elements}
+            <button disabled>submit</button>
         </div>
     }
 });
