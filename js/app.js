@@ -13,6 +13,11 @@
          elements.push(element);
          this.setState({elements});
      },
+     deleteElement:function(index){
+         let elements = this.state.elements;
+         elements.splice(index,1);
+         this.setState({elements });
+     },
 
    render:function(){
       const isEditor =this.state.isEditor;
@@ -22,7 +27,8 @@
         <div className={isEditor ? "" : "hidden"}>
 
             <Editor elements={this.state.elements}
-                    onAdd={this.addElement}/>
+                    onAdd={this.addElement}
+                     onDelete={this.deleteElement}/>
         </div>
 
         <div className={isEditor ? "hidden" : ""}>
@@ -36,19 +42,21 @@
 
    render:function(){
     return   <div>
-         <Left  elements={this.props.elements}/>
+         <Left  elements={this.props.elements} onDelete={this.onDelete}/>
         <Right onAdd={this.props.onAdd}/>
     </div>
    }
  });
 
  const Left = React.createClass({
-
+   remove:function(index){
+     this.props.onDelete(index)
+   },
    render:function(){
        const elements = this.props.elements.map((ele)=>{
           return <div>
               <input type={ele}/>
-              <buton>-</buton>
+              <buton onClick={this.remove.bind(this.index)}>-</buton>
           </div>
        })
 
