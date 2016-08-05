@@ -49,12 +49,14 @@
  });
 
  const Left = React.createClass({
-
+   remove:function(index){
+       this.props.onDelete(index);
+   },
    render:function(){
-       const elements = this.props.elements.map(ele=>{
+       const elements = this.props.elements.map((ele,index)=>{
        return <div>
            <input type={ele}/>
-           <button>-</button>
+           <button onClick={this.remove.bind(this,index)}>-</button>
        </div>
    });
     return  <div>{elements}</div>
