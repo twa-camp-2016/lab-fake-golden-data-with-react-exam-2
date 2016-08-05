@@ -29,7 +29,7 @@ const App = React.createClass({
                 <Editor elements={this.state.elements} onAdd={this.addElement} onDelete={this.deleteElement}/>
             </div>
             <div className={isEditor?"hidden":''}>
-                <Previewer elements={this.state.elelments}/>
+                <Previewer elements={this.state.elements}/>
             </div>
         </div>
     }
@@ -46,8 +46,14 @@ const Editor = React.createClass({
 
 const Previewer = React.createClass({
    render:function () {
+       const elements=this.props.elements.map((ele,index)=>{
+           return <div>
+               <input type={ele}/>
+           </div>
+       });
        return <div>
-
+           {elements}
+           <button>Submit</button>
        </div>
    }
 });
