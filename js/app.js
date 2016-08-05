@@ -26,7 +26,7 @@ const App = React.createClass({
             </div>
             <div className={isEditor?'hidden':''}>
                 <button onClick={this.toggle}>{isEditor?'Previewer':'Editor'}</button>
-                <Previewer/>
+                <Previewer elements={this.state.elements}/>
             </div>
         </div>
     }
@@ -74,7 +74,15 @@ const Left = React.createClass({
 
 const Previewer = React.createClass({
     render(){
-        return <div>Previewer</div>
+        const elements=this.props.elements.map((ele,index)=>{
+            return <div key={index}>
+                <input type={ele}/>
+            </div>
+        });
+        return <div>
+            {elements}
+            <button>submit</button>
+        </div>
     }
 });
 
