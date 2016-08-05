@@ -2,11 +2,21 @@
   getInitialState:function(){
     return {
         isEditor:true,
-        elements:['test']
+        elements:[]
     }
   },
      toggle:function(){
          this.setState({isEditor:!this.state.isEditor});
+     },
+     addElement:function(element){
+       const elements  = this.state.elements;
+         elements.push(element);
+         this.setState({elements});
+     },
+     deleteElement:function(index){
+       const elements = this.state.elements;
+         elements.splice(index,1);
+         this.setState({elements});
      },
    render:function(){
       const isEditor= this.state.isEditor;
@@ -14,7 +24,9 @@
         <button onClick={this.toggle}>{isEditor ?  "Preview" : "Edit"}</button>
 
         <div className={isEditor ? "" : "hidden"}>
-            <Editor elements={this.state.elements}/>
+            <Editor elements={this.state.elements}
+                    onAdd={this.addElement}
+                     onDelete={this.deleteElement}/>
         </div>
 
         <div className={isEditor ? "hidden" : ""}>
@@ -30,8 +42,8 @@
 
    render:function(){
     return   <div>
-        <Left elements={this.props.elements}/>
-        <Right />
+        <Left elements={this.props.elements} onDelete={this.props.onDelete}/>
+        <Right onAdd={this.props.onAdd}/>
     </div>
    }
  });
@@ -39,16 +51,29 @@
  const Left = React.createClass({
 
    render:function(){
-    return  <div>{this.props.elements}</div>
+       const elements = this.props.elements.map(ele=>{
+       return <div>
+           <input type={ele}/>
+           <button>-</button>
+       </div>
+   });
+    return  <div>{elements}</div>
    }
 
  })
 
 
  const Right = React.createClass({
-
+     add:function(){
+       const element = $("input[name=element]:checked").val();
+         this.props.onAdd(element);
+     },
    render:function(){
-    return  <div>Right</div>
+    return  <div>
+        <input type="radio" name="element" value="text"/>Text
+        <input type="radio" name="element" value="date"/>Date
+        <button onClick={this.add}>+</button>
+    </div>
    }
 
  })
