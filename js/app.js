@@ -17,11 +17,10 @@ const App = React.createClass({
     render: function () {
         const isEditor = this.state.isEditor;
         return <div>
-           <center><ReactRouter.Link to="/Preview">Preview</ReactRouter.Link></center>
-            {this.props.children && React.cloneElement(this.props.children,{
-                elements:this.state.elements,
-                onAdd:this.addElement,
-                onDelete:this.deleteElement
+            {this.props.children && React.cloneElement(this.props.children, {
+                elements: this.state.elements,
+                onAdd: this.addElement,
+                onDelete: this.deleteElement
             })}
         </div>
     }
@@ -30,6 +29,8 @@ const App = React.createClass({
 const Editor = React.createClass({
     render: function () {
         return <div className="row bg-success">
+            <center><ReactRouter.Link to="/Preview">Preview</ReactRouter.Link></center>
+
             <div className="col-md-3 col-md-offset-2">
                 <Left elements={this.props.elements} onDelete={this.props.onDelete}/>
             </div>
@@ -52,6 +53,7 @@ const Preview = React.createClass({
             </div>
         })
         return <div className="bg-success">
+           <center><ReactRouter.Link to='/'>Editor</ReactRouter.Link></center>
             <div className="row bg-success">
                 <div className="col-md-5 col-md-offset-4">{elements}</div>
             </div>
@@ -101,7 +103,7 @@ const Right = React.createClass({
 
 ReactDOM.render((
     <ReactRouter.Router>
-        <ReactRouter.Route path="/" component={App}>
+        <ReactRouter.Route path="/"component={App}>
             <ReactRouter.IndexRoute component={Editor}/>
             <ReactRouter.Route path="Preview" component={Preview}/>
         </ReactRouter.Route>
