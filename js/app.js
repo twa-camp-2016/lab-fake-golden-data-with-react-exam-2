@@ -12,11 +12,15 @@ const App = React.createClass({
         this.state.elements.push(element);
         this.setState({elements: this.state.elements});
     },
+    deleteElement: function (i) {
+        this.state.elements.splice(i, 1);
+        this.setState({elements: this.state.elements});
+    },
     render: function () {
         return <div>
             <button onClick={this.toggle}>{this.state.isEditor ? 'preview' : 'edit'}</button>
             <div className={this.state.isEditor ? '' : 'hidden'}>
-                <Editor addElement={this.addElement}/>
+                <Editor elements={this.state.elements} addElement={this.addElement} deleteElement={this.deleteElement}/>
             </div>
         </div>
     }
@@ -26,9 +30,27 @@ const Editor = React.createClass({
     render: function () {
         return <div>
             <Right addElement={this.props.addElement}/>
+            <Left elements={this.props.elements} deleteElement={this.props.deleteElement}/>
         </div>
     }
 });
+
+const Left = React.createClass({
+    remove: function (index) {
+        this.props.deleteElement(index);
+    },
+    render: function () {
+        const elements = this.props.elements.map((ele, index) => {
+            return <div key={index}>
+                <input type={ele}/>
+                <button onClick={this.remove.bind(this, index)}>X</button>
+            </div>
+        });
+        return <div>
+            {elements}
+        </div>
+    }
+})
 
 const Right = React.createClass({
     addElement: function () {
