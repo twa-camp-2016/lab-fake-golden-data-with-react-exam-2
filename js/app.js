@@ -1,12 +1,13 @@
+const Router = ReactRouter.Router;
+const Route = ReactRouter.Route;
+const Link = ReactRouter.Link;
+const IndexRoute = ReactRouter.IndexRoute;
+
 const App = React.createClass({
     getInitialState(){
         return {
-            isEditor: true,
             elements: []
         }
-    },
-    toggle(){
-        this.setState({isEditor: !this.state.isEditor})
     },
     add(element){
         const elements = this.state.elements;
@@ -20,33 +21,26 @@ const App = React.createClass({
         this.setState({elements});
     },
     render(){
-        var isEditor = this.state.isEditor;
         return <div>
-            <div className={isEditor ? '' : 'hidden'}>
-                <center>
-                    <div id="center" className="btn-group" role="group">
-                        <button className="btn btn-info btn-lg"
-                                onClick={this.toggle}>{isEditor ? 'Preview' : 'Editor'}</button>
-                    </div>
-                </center>
-                <Editor add={this.add} delete={this.delete} elements={this.state.elements}/>
-            </div>
-            <div className={isEditor ? 'hidden' : ''}>
-                <center>
-                    <div id="center" className="btn-group" role="group">
-                        <button className="btn btn-info btn-lg"
-                                onClick={this.toggle}>{isEditor ? 'Preview' : 'Editor'}</button>
-                    </div>
-                </center>
-                <Previewer elements={this.state.elements}/>
-            </div>
-        </div>
+            {this.props.children && React.cloneElement(this.props.children, {
+                elements: this.state.elements,
+                add: this.add,
+                delete: this.delete
+            })}
+        </div>;
     }
 });
 
 const Editor = React.createClass({
     render(){
         return <div>
+            <center>
+                <div id="center" className="btn-group" role="group">
+                    <Link to="/previewer">
+                        <button className="btn btn-info btn-lg">Previewer</button>
+                    </Link>
+                </div>
+            </center>
             <Right add={this.props.add}/>
             <Left elements={this.props.elements} delete={this.props.delete}/>
         </div>
@@ -64,14 +58,14 @@ const Right = React.createClass({
                <span className="input-group-addon">
                   <input type="radio" name="element" value='text'/>
                </span>
-                <input type="text" className="form-control" value='text'/>
+                <input type="text" className="form-control" value='text' disabled=""/>
             </div>
             <br/>
             <div className="col-lg-6 input-group">
                <span className="input-group-addon">
                   <input type="radio" name="element" value='date'/>
                </span>
-                <input type="text" className="form-control" value='date'/>
+                <input type="text" className="form-control" value='date' disabled=""/>
             </div>
             <br/>
             <div className="btn-group  col-xs-offset-3" role="group">
@@ -119,6 +113,13 @@ const Previewer = React.createClass({
             </div>
         });
         return <div id="last">
+            <center>
+                <div id="center" className="btn-group" role="group">
+                    <Link to="/">
+                        <button className="btn btn-info btn-lg">Editor</button>
+                    </Link>
+                </div>
+            </center>
             <br/>
             {elements}
             <center>
@@ -131,6 +132,11 @@ const Previewer = React.createClass({
     }
 });
 
-ReactDOM.render(
-    <App/>
-    , document.getElementById('content'));
+ReactDOM.render((
+    <Router>
+        <Route path="/" component={App}>
+            <IndexRoute component={Editor}/>
+            <Route path="previewer" component={Previewer}/>
+        </Route>
+    </Router>
+), document.getElementById('content'));
