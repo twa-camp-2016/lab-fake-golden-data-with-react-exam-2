@@ -53,16 +53,25 @@ const Previewer = React.createClass({
 });
 
 const Left = React.createClass({
+    remove:function (index) {
+      this.props.onDelete(index);
+    },
    render:function () {
+       const elements=this.props.elements.map((ele,index)=>{
+          return <div>
+              <input type={ele}/>
+              <button onClick={this.remove.bind(this,index)}>X</button>
+          </div>
+       });
        return <div>
-
+           {elements}
        </div>
    }
 });
 
 const Right = React.createClass({
    add:function () {
-     const element=$("input[name=element]:checked").val()
+     const element=$("input[name=element]:checked").val();
        this.props.onAdd(element);
       // console.log(element);
    },
