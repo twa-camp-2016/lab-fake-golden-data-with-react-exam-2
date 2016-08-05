@@ -1,40 +1,51 @@
 const App = React.createClass({
-render:function(){
-return<div> 
-<div>
-    <Editor />
-</div>
-<div>
-    <Preview />
-</div></div>
-}
+    getInitialState: function () {
+        return {
+            isEditor: true
+        }
+    },
+    toggle:function () {
+        this.setState({isEditor:!this.state.isEditor});
+    },
+    render: function () {
+        const isEditor = this.state.isEditor;
+        return <div>
+            <button onClick={this.toggle}>{isEditor?"Preview":"Edit"}</button>
+            <div className={isEditor?"":"hidden"}>
+                <Editor />
+            </div>
+            <div className={isEditor?"hidden":""}>
+                <Preview />
+            </div>
+        </div>
+    }
 });
 
 const Editor = React.createClass({
-render:function(){
-return<div> 
-<Left/>
-<Right/>
-</div>
-}
+    render: function () {
+        return <div>
+            <Left/>
+            <Right/>
+        </div>
+    }
 });
 
 const Preview = React.createClass({
-render:function(){
-return<div> Preview</div>
-}
+    render: function () {
+        return <div> Preview</div>
+    }
 });
 
 const Left = React.createClass({
-render:function(){
-return<div> Left</div>
-}
+    render: function () {
+        return <div> Left</div>
+    }
 });
 
 const Right = React.createClass({
-render:function(){
-return<div> Right</div>
-}
+    render: function () {
+        return <div> Right</div>
+    }
 })
 
- ReactDOM.render(<App />, document.getElementById('content'));
+ReactDOM.render(<App />, document.getElementById('content'));
