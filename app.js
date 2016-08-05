@@ -5,12 +5,35 @@ const App = React.createClass({
             elements:[]
         }
     },
-
+    toggle:function () {
+        this.setState({
+            isEditor:!this.state.isEditor
+        })
+    },
     render: function () {
-        return <div>eeee</div>;
+        return <div>
+            <button onClick={this.toggle}>{this.state.isEditor?"edtior":"preview"}</button>
+            <div className={this.state.isEditor?"":"hidden"}>
+                <Editor />
+                </div>
+            <div className={this.state.isEditor?"hidden":""}>
+                <Preview />
+                </div>
+        </div>;
     }
 });
 
+const Editor=React.createClass({
+   render:function () {
+       return <div className={this.props.isEditor}>editor</div>
+   }
+});
+
+const Preview=React.createClass({
+    render:function () {
+        return <div className={this.props.isEditor}>preview</div>
+    }
+});
 
 
 
