@@ -1,14 +1,8 @@
 const App = React.createClass({
     getInitialState: function () {
         return {
-            isEditor: true,
             elements: []
         }
-    },
-    toggle: function () {
-        this.setState({
-            isEditor: !this.state.isEditor
-        });
     },
     addElement: function (element) {
         const elements = this.state.elements;
@@ -21,33 +15,29 @@ const App = React.createClass({
         this.setState({elements});
     },
     render: function () {
-        const isEditor = this.state.isEditor;
         return <div className="container">
-            <div className="title container-fluid" id="edit">
-                <center><input type="button" onClick={this.toggle} value={isEditor ? "Preview" : "Edit"}
-                               className="btn btn-info"/>
-                </center>
-            </div>
-            <div className={isEditor ? "" : "hidden"}>
-                <Editor elements={this.state.elements} onAdd={this.addElement} onDelete={this.deleteElement}/>
-            </div>
-            <div className={isEditor ? "hidden" : ""}>
-                <Previewer elements={this.state.elements}/>
-            </div>
+            {this.props.children && React.cloneElement(this.props.children, {
+                elements: this.state.elements,
+                onAdd: this.addElement,
+                onDelete: this.deleteElement
+            })}
         </div>;
     }
 });
 
 const Editor = React.createClass({
     render: function () {
-        return <p className="editor">
+        return <div className="editor">
+            <center id="edit">
+                <ReactRouter.Link to="/Previewer">Preview</ReactRouter.Link>
+            </center>
             <div className="left ">
                 <Left elements={this.props.elements} onDelete={this.props.onDelete}/>
             </div>
             <div className="right">
                 <Right onAdd={this.props.onAdd}/>
             </div>
-        </p>;
+        </div>;
     }
 });
 
@@ -58,7 +48,7 @@ const Left = React.createClass({
     render: function () {
         const elements = this.props.elements.map((ele, index) => {
             return <div key={index}>
-                <div className="">
+                <div>
                     <input type={ele} className="input-lg  spacing"/>
                     <button onClick={this.remove.bind(this, index)} className="btn-danger input-lg">X</button>
                 </div>
@@ -89,13 +79,16 @@ const Previewer = React.createClass({
 
     render: function () {
         const elements = this.props.elements.map((ele, index) => {
-            return <div key={index} >
+            return <div key={index}>
                 <center className="spacing">
                     <input type={ele} className="input-lg"/>
                 </center>
             </div>
         });
         return <div className="form-group ">
+            <center id="edit">
+                <ReactRouter.Link to="/Editor">Editor</ReactRouter.Link>
+            </center>
             {elements}
             <center className="submit">
                 <button className="btn btn-success spacing" disabled="disabled">Submit</button>
@@ -105,4 +98,11 @@ const Previewer = React.createClass({
 });
 
 
-ReactDOM.render(<App />, document.getElementById('content'));
+ReactDOM.render(
+    <ReactRouter.Router>
+        <ReactRouter.Route path="/" component={App}>
+            <ReactRouter.Route path="Previewer" component={Previewer}/>
+            <ReactRouter.Route path="Editor" component={Editor}/>
+            <ReactRouter.IndexRoute component={Editor}/>
+        </ReactRouter.Route>
+    </ReactRouter.Router>, document.getElementById('content'));
