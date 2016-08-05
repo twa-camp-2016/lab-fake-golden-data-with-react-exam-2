@@ -76,9 +76,14 @@ const Right = React.createClass({
 });
 
 const Previewer = React.createClass({
-        render:function(){
+
+        render:function(){ const elements = this.props.elements.map((ele, index) => {
+            return <div key={index}>
+                <input type={ele}/>
+            </div>;
+        });
             return <div>
-            Preview
+                {elements}
         </div>;
     }
 });
